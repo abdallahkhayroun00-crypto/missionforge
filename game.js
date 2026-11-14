@@ -55,16 +55,6 @@ function renderRoute(){
  if(routeCache!==html){$('#route-items').innerHTML=html;routeCache=html;}
  $('#route-note').textContent=ar?'الغيوم والغبار والحطام تحديات مُحاكاة، وليست أحوال طقس مباشرة.':'Clouds, dust and debris are simulated obstacles, not live conditions.';
 }
-function drawMissionChart(s){
- // These are latitude/longitude-anchored waypoints on an illustrated arcade map, not an orbit prediction.
- const p0=project(-238,-198),p1=project(235,-198),p2=project(235,205),p3=project(-238,205);
- path([p0,p1,p2,p3],'#17405438','#7aafb633');
- ctx.save();ctx.setLineDash([5,8]);ctx.strokeStyle='#9adfe34f';ctx.lineWidth=1.5;
- ctx.beginPath();s.sites.forEach((site,i)=>{const p=project(site.x,site.z);if(i===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y)});ctx.stroke();
- ctx.setLineDash([]);
- s.sites.forEach(site=>{const p=project(site.x,site.z);ctx.beginPath();ctx.arc(p.x,p.y,Math.max(3,3*scale),0,Math.PI*2);ctx.fillStyle='#e4d0a6';ctx.fill();});
- ctx.restore();
-}
 function resize(){width=canvas.clientWidth;height=canvas.clientHeight;const dpr=Math.min(devicePixelRatio||1,2);canvas.width=width*dpr;canvas.height=height*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);scale=Math.min(width/(width<700?700:780),(height-250)/440);}
 new ResizeObserver(resize).observe(canvas);
 function draw(t){

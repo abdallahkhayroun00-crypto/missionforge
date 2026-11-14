@@ -1,7 +1,7 @@
 import {parts,validateCraft} from './craft.js';
 import {equipment,initialLoadout,stats,createFlight,tick,distance} from './flight-engine.js';
 import {countries,getCountry,isObscured,localizedCountry,localizedRegion,localizedTask,hazardName} from './country-missions.js';
-import {renderCountryAtlas} from './country-renderer.js';
+import {renderCountryAtlas} from './country-renderer.js?v=unified-map-1';
 const T=s=>window.MissionLang.t(s),arabic=()=>window.MissionLang.isArabic();
 const $=s=>document.querySelector(s),canvas=$('#world'),ctx=canvas.getContext('2d');
 // The mission is now drawn against an upright country silhouette, not the Earth photo.

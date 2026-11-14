@@ -67,3 +67,13 @@
 
 /* Keep category groups stacked on phone screens (override legacy #parts columns). */
 @media(max-width:650px){.library #parts{grid-template-columns:minmax(0,1fr)}}
+
+/* Destination selection before launch */
+.yard-launch{display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:9px;min-width:185px}
+.yard-country-label{display:flex;flex-direction:column;gap:7px;color:#c8ab80;font-size:9px;letter-spacing:1.2px;font-weight:700}
+.yard-country-label select{background:#1b303c;color:#f3f4f1;border:1px solid #55727b;border-radius:5px;padding:11px 14px;font:600 12px 'DM Sans',sans-serif;cursor:pointer;width:100%}
+.yard-country-label select:focus-visible{outline:2px solid #f3c58a;outline-offset:3px}
+.yard-launch .primary{width:100%}
+html[dir="rtl"] .yard-country-label{letter-spacing:0;font-size:11px}
+html[dir="rtl"] .yard-country-label select{font-family:'Noto Sans Arabic',sans-serif}
+@media(max-width:650px){.yard-launch{width:100%;min-width:0;max-width:300px}}

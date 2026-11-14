@@ -18,7 +18,7 @@ export function stats(loadout){
 }
 export const distance=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
 // Night/day is a mission-time cycle, not a fake country-specific shadow strip.
-export function isEclipse(s){return (s.elapsed%92)>=68;}
+export function isEclipse(s){return (s.elapsed%131)>=115;}
 export function createFlight(loadout,craft=null,countryId='morocco'){
  const analysis=craft?analyzeCraft(craft):null;
  if(analysis&&!analysis.ready)throw new Error('Spacecraft is not launch-ready');
@@ -27,6 +27,7 @@ export function createFlight(loadout,craft=null,countryId='morocco'){
  const country=getCountry(countryId),sites=missionSites(countryId),first=sites[0];
  const relay={...pointFor(country,country.relay.lat,country.relay.lon),name:country.relay.name,ar:country.relay.ar};
  const targets=sites.reduce((n,site)=>n+site.initial,0);
+ const hazard=(a,b,offset,phase)=>{const dx=b.x-a.x,dz=b.z-a.z,len=Math.hypot(dx,dz)||1;return {x:(a.x+b.x)/2-dz/len*offset,z:(a.z+b.z)/2+dx/len*offset,phase};};
  return {
   countryId:countryId in {morocco:1,turkiye:1,germany:1}?countryId:'morocco',
   spec,x:Math.max(-225,first.x-25),z:Math.min(180,first.z+15),
@@ -37,9 +38,9 @@ export function createFlight(loadout,craft=null,countryId='morocco'){
   message:'Scan every regional target, then send the data to the relay.',
   sites,relay,
   debris:[
-   {x:(sites[0].x+sites[1].x)/2+24,z:(sites[0].z+sites[1].z)/2-32,phase:0.7},
-   {x:(sites[1].x+sites[2].x)/2-35,z:(sites[1].z+sites[2].z)/2+19,phase:2.2},
-   {x:(sites[2].x+relay.x)/2+42,z:(sites[2].z+relay.z)/2+32,phase:4}
+   hazard(sites[0],sites[1],28,0.7),
+   hazard(sites[1],sites[2],-28,2.2),
+   hazard(sites[2],relay,35,4)
   ],
   trail:[],trailClock:0
  };
@@ -56,7 +57,7 @@ export function tick(s,input,dt){
  const length=Math.hypot(dx,dz);if(length>1){dx/=length;dz/=length;}
  const moving=Math.hypot(dx,dz)>.05;
  if(moving){s.headingX=dx;s.headingZ=dz;}
- const speed=9.2/(1+s.spec.mass/90)*(s.spec.speedFactor||1);
+ const speed=8.2/(1+s.spec.mass/90)*(s.spec.speedFactor||1);
  s.x=Math.max(-237,Math.min(237,s.x+dx*speed*dt));
  s.z=Math.max(-198,Math.min(198,s.z+dz*speed*dt));
  if(moving){
@@ -71,10 +72,10 @@ export function tick(s,input,dt){
    s.scan=0;
    s.message='Optical scan blocked by simulated clouds, haze or dust. Wait for clearer visibility.';
   }else{
-   consumption+=s.spec.scanPower;
+   consumption+=s.spec.scanPower*.72;
    s.scan+=dt;
    s.message=s.eclipse?'Scanning in eclipse uses stored battery energy.':'Scanning regional target… hold position.';
-   const scanTime=Math.max(3.8,s.spec.scan*1.75);
+   const scanTime=Math.max(3.8,s.spec.scan*1.85);
    if(s.scan>=scanTime){
     s.scan=0;target.remaining--;s.stored++;
     s.message=target.remaining?'Regional data packet acquired. Keep scanning for a second packet.':'Region scanned. Visit the next target or downlink at the relay.';
@@ -87,7 +88,7 @@ export function tick(s,input,dt){
  if(input.link&&distance(s,s.relay)<26&&!moving&&s.stored){
   consumption+=2.1;
   s.link+=dt;s.message='Downlink active. Stored data is becoming delivered science.';
-  if(s.link>=1.6){s.link=0;s.stored--;s.sent++;}
+  if(s.link>=1.9){s.link=0;s.stored--;s.sent++;}
  }else{
   s.link=0;
   if(input.link)s.message=s.stored?'Reach the relay ring and stop to send stored packets.':'No stored packets. Scan a region first.';
@@ -97,8 +98,8 @@ export function tick(s,input,dt){
  for(const d of s.debris){
   d.x+=Math.cos(s.elapsed*.24+d.phase)*4*dt;
   d.z+=Math.sin(s.elapsed*.27+d.phase)*3*dt;
-  if(distance(s,d)<16&&s.invincible<=0){
-   s.health--;s.invincible=4;
+  if(distance(s,d)<12&&s.invincible<=0){
+   s.health--;s.invincible=5.5;
    s.message='Debris impact! Give tumbling objects a wider berth.';
   }
  }

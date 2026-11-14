@@ -3,11 +3,16 @@
 ## Project name
 MissionForge
 
+## Team
+Atlas Tech
+
+Members: Abdallah Khayroun, Fahd Mtidam, Youssef Chadli.
+
 ## High-level summary
 MissionForge is an educational space mission design game that turns engineering trade-offs into decisions learners can test. Players select an Earth-observation objective, assemble a spacecraft, choose a launcher and orbit, and simulate whether their design meets budget, mass, energy, battery, data-return and scientific-compatibility constraints. Clear feedback explains why a design succeeds or requires another iteration.
 
 ## Project demo
-Use the seven-slide deck at `docs/presentation.html`, or export it to a seven-page PDF. Replace this line with a tested public deck/PDF URL. The deck must include the final team name and all team member names before submission.
+Use the seven-slide deck at `docs/presentation.html`, or export it to a seven-page PDF. Replace this line with a tested public deck/PDF URL. The deck identifies Atlas Tech and all three team members.
 
 ## Final project link
 Replace with the verified live site URL after hosting is enabled. Also include https://github.com/abdallahkhayroun00-crypto/missionforge as the source repository. Do not submit an expected Pages URL before testing that it is live and public.
@@ -29,7 +34,7 @@ HTML, CSS, JavaScript, inline SVG, Python's development HTTP server, Node.js bui
 OpenAI Codex assisted with implementation, tests, documentation, interface copy and presentation drafting. The team must review the result, source attribution and final disclosure before submission. No generated photographic, audio or video assets or NASA logos are included.
 
 ## Checklist
-- Add final team name and all team member names to the presentation.
+- Confirm the spelling of Atlas Tech and all three member names before submitting.
 - Review the primary NASA resources and ensure source claims match actual use.
 - Verify public access to the game and deck without login.
 - Complete all required project page fields in English.

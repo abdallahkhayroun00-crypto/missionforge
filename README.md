@@ -4,6 +4,12 @@
 
 An interactive educational space mission design game for the NASA Space Apps Challenge 2026, Space Mission Design Game challenge. Choose an Earth-observation objective, assemble a spacecraft, balance limited resources, and simulate the engineering consequences.
 
+## Team — Atlas Tech
+
+- Abdallah Khayroun
+- Fahd Mtidam
+- Youssef Chadli
+
 ## Run locally
 
 Requires Python 3 for a local server; no build or dependency installation:

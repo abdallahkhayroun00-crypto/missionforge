@@ -13,6 +13,7 @@ export function createFlight(loadout,craft=null,countryId='morocco'){
  return {
   countryId:Object.keys({morocco:1,turkiye:1,germany:1}).includes(countryId)?countryId:'morocco',
   spec,x:Math.max(-225,first.x-36),z:Math.min(185,first.z+20),
+  shadowEdge:countryId==='turkiye'?-150:countryId==='germany'?-60:-95,
   energy:spec.capacity,health:spec.hull||3,time:240,elapsed:0,scan:0,scanTarget:null,link:0,
   stored:0,sent:0,required:sites.reduce((sum,site)=>sum+site.initial,0),
   invincible:0,status:'playing',
@@ -34,7 +35,7 @@ export function tick(s,input,dt){
  const speed=100/(1+s.spec.mass/90)*(s.spec.speedFactor||1);
  s.x=Math.max(-245,Math.min(245,s.x+dx*speed*dt));
  s.z=Math.max(-210,Math.min(210,s.z+dz*speed*dt));
- const shadow=s.x< -95;
+ const shadow=s.x<s.shadowEdge;
  let consumption=(s.spec.bus??.7)+(moving?1.2:0);
  const target=s.sites.filter(p=>p.remaining>0).sort((a,b)=>distance(s,a)-distance(s,b)).find(p=>distance(s,p)<25);
  if(input.scan&&target&&!moving){

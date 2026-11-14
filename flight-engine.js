@@ -40,7 +40,7 @@ export function createFlight(loadout,craft=null,countryId='morocco'){
   debris:[
    hazard(sites[0],sites[1],28,0.7),
    hazard(sites[1],sites[2],-28,2.2),
-   hazard(sites[2],relay,35,4)
+   hazard(sites[2],relay,50,4)
   ],
   trail:[],trailClock:0
  };

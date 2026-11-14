@@ -12,7 +12,7 @@ MissionForge offers a **full upright map of the selected country** rather than a
 
 Map outlines are simplified **Natural Earth (1:110m)** geographic data, adapted from [johan/world.geo.json](https://github.com/johan/world.geo.json), with latitude/longitude anchors in `country-missions.js`. The same outline data is stored locally in `country-outlines.js` so the game does not depend on an external map API.
 
-**Cartographic note:** The Morocco gameplay map extends through the southern geographic region around Dakhla. Western Sahara is a disputed territory; the atlas uses a faint dashed subdivision to indicate that political boundaries are contested. This is a geographic gameplay map, not a statement about sovereignty or administrative authority.
+**Cartographic note:** The Morocco gameplay map includes the southern geographic region around Dakhla, without an internal boundary overlay or cartographic grid. Western Sahara is a disputed territory; hiding map division lines is a visual design choice, not a statement about sovereignty or administrative authority.
 
 ## Challenge model (illustrative, not orbital engineering calculations)
 

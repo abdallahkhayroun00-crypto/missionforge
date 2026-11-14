@@ -15,10 +15,10 @@ An interactive educational space mission design game for the NASA Space Apps Cha
 Requires Python 3 for a local server; no build or dependency installation:
 
 ```sh
-python3 -m http.server 8000
+python3 -m http.server 8765
 ```
 
-Open http://localhost:8000. Use a server rather than opening index.html directly, because the app uses JavaScript modules. Node.js 20+ is needed only for tests:
+Open http://localhost:8765. Use a server rather than opening index.html directly, because the app uses JavaScript modules. Node.js 20+ is needed only for tests:
 
 ```sh
 npm test
@@ -46,8 +46,23 @@ The main page is a 2.5D canvas game with a generated Earth background, projected
 
 The arcade model uses deliberately scaled fictional units, geometry and timing. It is not orbital flight dynamics. The original detailed mission designer remains available through **Engineering lab** at `lab.html`, with its separate orbit-energy model, six checks and three objectives. The two modes are complementary educational activities, not interchangeable numerical simulations.
 
+## Verification
+
+```sh
+npm ci
+npm test
+npm run test:browser
+```
+
+Browser checks use Playwright with system Chromium when present. On other machines, run `npx playwright install chromium`, or set `CHROMIUM_PATH` to a Chromium executable. The application itself still requires no npm installation; these dependencies are for development testing only. The browser suite starts its own local server on port 8765.
+
+With the local server running, `npm run export:deck` regenerates the printable presentation with public links.
+
+See [QA audit](docs/QA.md) for tested workflows, fixes and browser screenshots.
+
 ## Project materials
 
+- [Printable seven-page PDF](docs/presentation.pdf).
 - [Seven-slide presentation](docs/presentation.html): open with the local server, use arrow keys to navigate, or print to PDF (seven landscape pages).
 - [Submission text](docs/SUBMISSION.md): English draft for the NASA Space Apps project form. Verify and replace the marked links before submission.
 - [Sources, model equations, limitations and AI disclosure](docs/SOURCES.md).

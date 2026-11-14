@@ -40,3 +40,12 @@
 - Integrated workshop craft into flight: module layout renders on the ship; calculated hardware drives power, mass, movement and health. Refit returns the current craft to the workshop.
 - Updated homepage, project deck, README, sources and submission draft. Documented local-only persistence and differences between bench, arcade and detailed lab models.
 - Verification: 27 automated model tests; DOM smoke checks for workshop save/load/compare/launch transfer and game setup/pause/refit. A continuous flight with the starter workshop craft succeeds while avoiding the central debris on its return route. Visual device testing remains outstanding because the browser runtime is unavailable.
+
+## 2026-11-14 — real browser QA and corrections
+- Established a repeatable Playwright suite using installed Chromium, replacing the earlier limitation to DOM-only smoke tests. Added a development dependency, lockfile, browser config and npm commands; the runtime app remains dependency-free.
+- Reproduced and fixed an actual 3D deck hit-testing bug that prevented clicks on empty tiles. Verified every editable tile and four rotations on desktop and mobile.
+- Corrected fractional-eclipse integration and initial-empty-battery reporting; tightened imported design shape and name validation.
+- Unified keyboard/touch downlink visualization, simplified mobile labels, removed duplicate background attribution and replaced unsupported decorative glyphs.
+- Tested complete winning flights with keyboard input, real mobile touch hold/release, failure/refit, all module/preset choices, fleet/storage/file paths, lab/academy workflows and local links.
+- Added docs/QA.md with coverage and limits, actual Chromium screenshots, and a verified seven-page PDF. Added a reproducible PDF export script using public URLs.
+- Final verification: 30 model tests and 29 browser cases pass; desktop touch duplicate intentionally skipped. Additional small phone/tablet/laptop width checks show no horizontal overflow. No physical-device or non-Chromium browser claim is made.

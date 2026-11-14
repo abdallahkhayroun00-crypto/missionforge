@@ -11,7 +11,7 @@ function roundRect(ctx,x,y,w,h,r){
 }
 // Fit the *whole* national silhouette (including the southern region), rather than
 // using a fixed center/scale that accidentally shrank or cropped it on phones.
-function viewport(width,height,countryId,preview){
+export function viewport(width,height,countryId,preview){
   const country=getCountry(countryId),mobile=width<820;
   const region=countryId==='morocco'
     ?[...outlines.morocco,...outlines.westernSahara]
@@ -118,8 +118,9 @@ function drawLand(ctx,countryId,country,view,seconds){
     ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle='#c4e2d516';ctx.stroke();
   }
   ctx.restore();
-  ctx.save();traceOutline(ctx,polygons,country,view);ctx.lineWidth=2.6;ctx.strokeStyle='#c6e4ce99';ctx.stroke();
-  traceOutline(ctx,polygons,country,view);ctx.lineWidth=.75;ctx.strokeStyle='#ffffff55';ctx.stroke();ctx.restore();
+  const outerLines=countryId==='morocco'?outlines.morocco:polygons;
+  ctx.save();traceOutline(ctx,outerLines,country,view);ctx.lineWidth=2.6;ctx.strokeStyle='#c6e4ce99';ctx.stroke();
+  traceOutline(ctx,outerLines,country,view);ctx.lineWidth=.75;ctx.strokeStyle='#ffffff55';ctx.stroke();ctx.restore();
   if(countryId==='morocco'){
     // Separate dashed internal line acknowledges the region's disputed status.
     ctx.save();traceOutline(ctx,outlines.westernSahara,country,view);

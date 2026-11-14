@@ -24,7 +24,7 @@ renderCountries();
 function renderRoute(){if(!flight)return;const ar=arabic(),s=flight,done=s.sites.filter(site=>site.remaining===0).length;
  $('#route-country').textContent=getCountry(s.countryId).flag+' '+localizedCountry(getCountry(s.countryId),ar);
  $('#route-count').textContent=`${done}/${s.sites.length}`;
- const html=s.sites.map(site=>{const cloudy=isObscured(s,site),completed=site.remaining===0;const state=completed?(ar?'تم الرصد':'Scanned'):cloudy?hazardName(site.hazard,ar):(ar?'جاهز للرصد':'Visible');return `<div class="route-stop ${completed?'complete':cloudy?'obscured':''}"><span class="route-dot" aria-hidden="true">${completed?'✓':cloudy?'☁':'◎'}</span><div><strong>${localizedRegion(site,ar)}</strong><small>${state}</small></div><span class="route-data">${site.initial-site.remaining}/${site.initial}</span></div>`;}).join('');
+ const html=s.sites.map(site=>{const cloudy=isObscured(s,site),completed=site.remaining===0;const state=completed?(ar?'تم الرصد':'Scanned'):cloudy?hazardName(site.hazard,ar):(ar?'جاهز للرصد':'Visible');return `<div class="route-stop ${completed?'complete':cloudy?'obscured':''}"><span class="route-dot" aria-hidden="true">${completed?'✓':cloudy?'☁':'◎'}</span><div title="${site.lat.toFixed(2)}°, ${site.lon.toFixed(2)}°"><strong>${localizedRegion(site,ar)}</strong><small>${localizedTask(site,ar)}</small><small class="route-condition">${state}</small></div><span class="route-data">${site.initial-site.remaining}/${site.initial}</span></div>`;}).join('');
  if(routeCache!==html){$('#route-items').innerHTML=html;routeCache=html;}
  $('#route-note').textContent=ar?'الغيوم والغبار والحطام تحديات مُحاكاة، وليست أحوال طقس مباشرة.':'Clouds, dust and debris are simulated obstacles, not live conditions.';
 }
@@ -59,7 +59,7 @@ s.sites.forEach((site,i)=>{
  cube(site.x,site.z,5,completed?'#426a5b':cloudy?'#b39c7f':'#85e9e7',8);
  const name=localizedRegion(site,arabic());
  const px=site.x,pz=site.z;
- label(`${name} · ${site.initial-site.remaining}/${site.initial}`,px,pz+33,completed?'#9cb6a4':'#f2eee4');
+ label(`${name} · ${site.initial-site.remaining}/${site.initial}`,px+(site.id==='casablanca'?19:0),pz+(site.id==='casablanca'?-62:33),completed?'#9cb6a4':'#f2eee4');
  if(cloudy)label('☁',px,pz-27,'#f0c18c');
  if(site.remaining&&distance(s,site)<25){
   ring(px,pz,29+s.scan/(s.spec.scan||3)*15,cloudy?'#f8c08a':'#f5e8b7');

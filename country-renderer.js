@@ -13,19 +13,19 @@ function viewport(width,height,countryId,preview){
   const mobile=width<820;
   const reserved=preview?0:(mobile?0:width<1100?240:287);
   const area=width-reserved;
-  const xFactor=countryId==='turkiye'?1.17:countryId==='morocco'?.82:.94;
+  const xFactor=countryId==='turkiye'?(mobile?.99:1.17):countryId==='morocco'?(mobile?.62:.82):mobile?.75:.94;
   const yFactor=countryId==='turkiye'?.72:1;
   const head=preview?124:mobile?96:106;
   const foot=preview?54:mobile?260:125;
   const available=Math.max(260,height-head-foot);
   const scale=Math.min((Math.max(340,area)-74)/(420*xFactor),available/(350*yFactor));
-  const cx=preview?width*.74:area*.505;
+  const cx=preview?(mobile?width*.52:width*.74):area*.505;
   const cy=preview?height*.56:head+available*.5;
   return {
     mapW:420*xFactor*scale,mapH:350*yFactor*scale,scale,
     project(world){return {x:cx+world.x*scale*xFactor,y:cy+world.z*scale*yFactor};},
     fromGeo(country,lat,lon){return this.project(pointFor(country,lat,lon));},
-    cx,cy,area,mobile
+    cx,cy,area,mobile,height
   };
 }
 function traceOutline(ctx,shape,country,view){
@@ -114,7 +114,7 @@ function writePill(ctx,x,y,title,subtitle,ar,side,view,status){
   if(side==='top'){left=x-w*.5;top=y-66;}
   if(side==='bottom'){left=x-w*.5;top=y+23;}
   left=Math.max(12,Math.min(view.area-18-w,left));
-  top=Math.max(120,Math.min(ctx.canvas.height-116-h,top));
+  top=Math.max(120,Math.min(view.height-116-h,top));
   ctx.save();
   ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(side==='left'?left+w:side==='right'?left:Math.max(left,Math.min(left+w,x)),top+h/2);
   ctx.strokeStyle=status==='blocked'?'#f3c386cc':'#a9e4dacc';ctx.lineWidth=1;ctx.stroke();
@@ -166,6 +166,11 @@ function drawShip(ctx,flight,view,ar){
   ctx.fillStyle='#e4eade';ctx.font=ar?'600 11px "Noto Sans Arabic",sans-serif':'700 10px "DM Sans",sans-serif';
   ctx.textAlign='center';ctx.fillText(ar?'مركبتك':'YOUR CRAFT',p.x,p.y+43);ctx.restore();
 }
+function drawTrail(ctx,flight,view){
+ if(flight.trail.length<2)return;
+ ctx.save();ctx.beginPath();flight.trail.forEach((world,i)=>{const p=view.project(world);if(i===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y)});
+ ctx.setLineDash([3,8]);ctx.strokeStyle='#8dedda7b';ctx.lineWidth=2;ctx.stroke();ctx.restore();
+}
 function drawDebris(ctx,flight,view){
   for(const d of flight.debris){
     const p=view.project(d);
@@ -185,6 +190,7 @@ export function renderCountryAtlas(ctx,width,height,flight,previewCountry,ar,pre
     return;
   }
   drawRoute(ctx,flight.sites,flight.relay,view,preview);
+  drawTrail(ctx,flight,view);
   drawDebris(ctx,flight,view);
   drawTargets(ctx,flight,view,ar,preview);
   drawShip(ctx,flight,view,ar);

@@ -3,7 +3,8 @@
 export const countries={
  morocco:{
   name:'Morocco',ar:'المغرب',flag:'🇲🇦',subtitle:'Atlantic coast & southern landscapes',subtitleAr:'الساحل الأطلسي ومشاهد الجنوب',
-  bounds:{west:-17.3,east:-5.1,south:22.4,north:35.8},
+  bounds:{west:-17.4,east:-0.8,south:20.8,north:36.15},
+  relay:{name:'Tangier',ar:'طنجة',lat:35.67,lon:-5.81},
   palette:['#305c61','#1f414b'],
   regions:[
    {id:'dakhla',name:'Dakhla',ar:'الداخلة',lat:23.72,lon:-15.95,task:'Observe the coastal lagoon',taskAr:'رصد التغيرات في البحيرة الساحلية',hazard:'haze',phase:20,period:38,blockedFor:12},
@@ -14,7 +15,7 @@ export const countries={
  },
  turkiye:{
   name:'Türkiye',ar:'تركيا',flag:'🇹🇷',subtitle:'Cities, coasts & land cover',subtitleAr:'المدن والسواحل والغطاء الأرضي',
-  bounds:{west:25.2,east:43.9,south:35.5,north:42.4},palette:['#365d62','#1f4548'],
+  bounds:{west:25.5,east:45.2,south:35.4,north:42.65},relay:{name:'Trabzon',ar:'طرابزون',lat:41.00,lon:39.74},palette:['#365d62','#1f4548'],
   regions:[
    {id:'izmir',name:'İzmir',ar:'إزمير',lat:38.42,lon:27.14,task:'Map the Aegean coastline',taskAr:'رسم خريطة الساحل على بحر إيجة',hazard:'cloud',phase:16,period:34,blockedFor:11},
    {id:'istanbul',name:'Istanbul',ar:'إسطنبول',lat:41.01,lon:28.95,task:'Observe urban growth',taskAr:'رصد توسّع المناطق العمرانية',hazard:'haze',phase:9,period:30,blockedFor:10},
@@ -24,7 +25,7 @@ export const countries={
  },
  germany:{
   name:'Germany',ar:'ألمانيا',flag:'🇩🇪',subtitle:'City systems & landscapes',subtitleAr:'المدن والأنظمة البيئية',
-  bounds:{west:5.7,east:15.8,south:47.0,north:55.2},palette:['#2c5862','#1e3b49'],
+  bounds:{west:5.5,east:15.5,south:47.0,north:55.3},relay:{name:'Bremen',ar:'بريمن',lat:53.08,lon:8.80},palette:['#2c5862','#1e3b49'],
   regions:[
    {id:'hamburg',name:'Hamburg',ar:'هامبورغ',lat:53.55,lon:9.99,task:'Monitor the port and estuary',taskAr:'رصد الميناء ومصبّ النهر',hazard:'cloud',phase:4,period:30,blockedFor:12},
    {id:'berlin',name:'Berlin',ar:'برلين',lat:52.52,lon:13.41,task:'Observe urban land cover',taskAr:'رصد الغطاء الأرضي داخل المدينة',hazard:'haze',phase:17,period:35,blockedFor:10},
@@ -43,7 +44,7 @@ export function missionSites(countryId){
  return country.regions.map(r=>({...r,...pointFor(country,r.lat,r.lon),remaining:2,initial:2}));
 }
 export function isObscured(flight,site){
- return flight && site.remaining>0 && ((flight.elapsed+site.phase)%site.period)<site.blockedFor;
+ return flight && site.remaining>0 && ((flight.elapsed+site.phase)%site.period)<site.blockedFor*1.3;
 }
 export function localizedCountry(country,arabic){return arabic?country.ar:country.name;}
 export function localizedRegion(site,arabic){return arabic?site.ar:site.name;}

@@ -1,3 +1,4 @@
+import {openAcademy} from './cockpit.js';
 // AI-assisted implementation; see docs/SOURCES.md.
 import {catalog,objectives,defaultDesign,simulate} from './simulation.js';
 let design={...defaultDesign};
@@ -43,3 +44,5 @@ $('#iterate').addEventListener('click',()=>{$('#objective').focus();$('#design-h
 render();
 
 $('#clear-history').addEventListener('click',()=>{history=[];attempt=0;$('#history').innerHTML='<p class="muted">Mission log cleared. Your next launch starts a new log.</p>';});
+
+$('#academy').addEventListener('click',()=>openAcademy(design));

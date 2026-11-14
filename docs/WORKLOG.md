@@ -14,3 +14,10 @@
 - Changed illustrative small-battery usable capacity from 15 Wh to 8 Wh to make eclipse storage a meaningful design choice. Updated the demonstration deck accordingly.
 - Verification: Node model tests, exhaustive evaluation of 288 configurations, and DOM interaction checks for all three objectives, reset, history and phase display.
 - Remaining limitations: browser visual/device testing unavailable in this environment; real source-document review, hosting activation and final submission remain outstanding. Simulation remains a simplified recurring-orbit educational model, as detailed in SOURCES.md.
+
+## 2026-11-14 — interactive flight academy
+- Added a modal flight academy using the current spacecraft configuration and the same engineering simulation.
+- Four illustrated flight phases connect actual constraint results to prediction questions and immediate explanatory feedback.
+- Added per-objective badges for viable designs and a separate four-question learning score. Repeating a goal does not duplicate badges; quiz answers never alter simulation physics.
+- Supports closing/reopening, keyboard-native controls, small screens and reduced-motion preference. Orbit animation is illustrative, not a trajectory simulation.
+- Verified model regression tests and DOM academy progression, correct/wrong answers, repeated sessions, scoring and unique badges. Visual browser testing remains outstanding.

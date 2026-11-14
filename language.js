@@ -216,8 +216,8 @@
   const sourceText=new WeakMap();
   const sourceAttrs=new WeakMap();
   const translate=value=>locale==='ar'&&Object.hasOwn(ar,value)?ar[value]:value;
-  const watcher=document.createTreeWalker(document.documentElement,NodeFilter.SHOW_TEXT);
   function apply(){
+    const watcher=document.createTreeWalker(document.documentElement,NodeFilter.SHOW_TEXT);
     document.documentElement.lang=locale;
     document.documentElement.dir=locale==='ar'?'rtl':'ltr';
     document.querySelectorAll('.lang-switch [data-lang]').forEach(b=>{

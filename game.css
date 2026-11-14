@@ -53,3 +53,10 @@ html[dir="rtl"] .route-stop small,html[dir="rtl"] .route-note{font-size:10px}
  .route-note{font-size:8px}
 }
 @media(max-width:400px){.country-picker-top span:last-child{display:none}.country-option strong{font-size:9px}.mission-route{width:153px;right:7px}}
+
+/* Compact the larger country briefing and clarify scan conditions. */
+@media(min-width:761px){#briefing{overflow-y:auto}.brief h1{font-size:clamp(52px,6vw,80px);margin:14px 0}.brief .description{line-height:1.55}.brief .mission-goals{margin:17px 0}}
+.route-stop small.route-condition{color:#d6bb84;font-weight:600}
+.route-stop.complete small.route-condition{color:#94d5ad}
+.mission-sources{font-size:11px;margin-top:16px}
+.mission-sources a{color:#e9c18a;text-decoration:underline;text-underline-offset:3px}

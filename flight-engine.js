@@ -19,7 +19,7 @@ export function createFlight(loadout,craft=null,countryId='morocco'){
   invincible:0,status:'playing',
   message:'Scan every regional target, then send the data to the relay.',
   sites,relay:{x:207,z:-163},
-  debris:[{x:-60,z:-45,phase:0},{x:74,z:105,phase:1.5},{x:183,z:-104,phase:3},{x:-195,z:-92,phase:4}],
+  debris:[{x:countryId==='turkiye'?10:-60,z:countryId==='turkiye'?10:-45,phase:0},{x:74,z:105,phase:1.5},{x:183,z:-104,phase:3},{x:-195,z:-92,phase:4}],
   trail:[]
  };
 }

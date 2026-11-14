@@ -9,23 +9,50 @@ function roundRect(ctx,x,y,w,h,r){
   ctx.moveTo(x+q,y);ctx.arcTo(x+w,y,x+w,y+h,q);ctx.arcTo(x+w,y+h,x,y+h,q);
   ctx.arcTo(x,y+h,x,y,q);ctx.arcTo(x,y,x+w,y,q);ctx.closePath();
 }
+// Fit the *whole* national silhouette (including the southern region), rather than
+// using a fixed center/scale that accidentally shrank or cropped it on phones.
 function viewport(width,height,countryId,preview){
-  const mobile=width<820;
-  const reserved=preview?0:(mobile?0:width<1100?240:287);
-  const area=width-reserved;
-  const xFactor=countryId==='turkiye'?(mobile?.99:1.17):countryId==='morocco'?(mobile?.62:.82):mobile?.75:.94;
-  const yFactor=countryId==='turkiye'?.72:1;
-  const head=preview?124:mobile?96:106;
-  const foot=preview?54:mobile?260:125;
-  const available=Math.max(260,height-head-foot);
-  const scale=Math.min((Math.max(340,area)-74)/(420*xFactor),available/(350*yFactor));
-  const cx=preview?(mobile?width*.52:width*.74):area*.505;
-  const cy=preview?height*.56:head+available*.5;
+  const country=getCountry(countryId),mobile=width<820;
+  const region=countryId==='morocco'
+    ?[...outlines.morocco,...outlines.westernSahara]
+    :outlines[countryId]||outlines.morocco;
+  const coordinates=region.flat();
+  const geoXs=coordinates.map(([lon,lat])=>pointFor(country,lat,lon).x);
+  const geoYs=coordinates.map(([lon,lat])=>pointFor(country,lat,lon).z);
+  const minX=Math.min(...geoXs),maxX=Math.max(...geoXs);
+  const minY=Math.min(...geoYs),maxY=Math.max(...geoYs);
+  // Approximate WGS84 aspect correction. The Morocco-only atlas gets a modest
+  // portrait emphasis; every coastline vertex still remains inside the frame.
+  const bounds=country.bounds;
+  const meanLat=(bounds.north+bounds.south)*Math.PI/360;
+  const geographicX=Math.cos(meanLat)*(350/(bounds.north-bounds.south))/(420/(bounds.east-bounds.west));
+  const xFactor=countryId==='morocco'?geographicX*.95:geographicX;
+  const yFactor=countryId==='morocco'?1.08:1;
+  const panelWidth=mobile?0:width<1100?252:330;
+  let left=mobile?14:26,right=mobile?width-14:width-panelWidth;
+  let top=mobile?108:119,bottom=mobile?height-338:height-149;
+  if(preview){
+    left=mobile?18:width<1100?width*.51:width*.52;
+    right=width-(mobile?18:35);
+    top=mobile?106:88;bottom=height-(mobile?60:76);
+  }
+  const safeW=Math.max(80,right-left-22),safeH=Math.max(80,bottom-top-20);
+  const scale=Math.max(.1,Math.min(safeW/((maxX-minX)*xFactor),safeH/((maxY-minY)*yFactor)));
+  const centerX=(minX+maxX)/2,centerY=(minY+maxY)/2;
+  const cx=(left+right)/2-centerX*scale*xFactor;
+  const cy=(top+bottom)/2-centerY*scale*yFactor;
   return {
-    mapW:420*xFactor*scale,mapH:350*yFactor*scale,scale,
+    mapW:(maxX-minX)*scale*xFactor,mapH:(maxY-minY)*scale*yFactor,scale,
     project(world){return {x:cx+world.x*scale*xFactor,y:cy+world.z*scale*yFactor};},
     fromGeo(country,lat,lon){return this.project(pointFor(country,lat,lon));},
-    cx,cy,area,mobile,height
+    cx,cy,area:preview?width:mobile?width:right,mobile,height,top,bottom,
+    rect:{left,right,top,bottom},
+    shapeBounds:{minX,maxX,minY,maxY},
+    // Exposed for deterministic geometry checks and regression tests.
+    outlineBox(){
+      const tl=this.project({x:minX,z:minY}),br=this.project({x:maxX,z:maxY});
+      return {minX:Math.min(tl.x,br.x),maxX:Math.max(tl.x,br.x),minY:Math.min(tl.y,br.y),maxY:Math.max(tl.y,br.y)};
+    }
   };
 }
 function traceOutline(ctx,shape,country,view){

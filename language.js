@@ -2,6 +2,7 @@
 (() => {
   const STORAGE_KEY='missionforge.language';
   const ar={
+    "Geography, science and simulation notes ↗":"ملاحظات حول الجغرافيا والنموذج العلمي والمحاكاة ↗",
     "REGIONAL MISSION":"مهمة الرصد",
     "01 / CHOOSE COUNTRY":"01 / اختر البلد",
     "4 SCAN TARGETS":"4 مواقع للرصد",

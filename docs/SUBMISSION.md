@@ -17,6 +17,9 @@ Use the seven-slide deck at `docs/presentation.html`, or export it to a seven-pa
 ## Final project link
 Replace with the verified live site URL after hosting is enabled. Also include https://github.com/abdallahkhayroun00-crypto/missionforge as the source repository. Do not submit an expected Pages URL before testing that it is live and public.
 
+## Spacecraft workshop update
+The primary experience now starts in a freely configurable 5×5 spacecraft workshop. Players assemble connected modules, study mass distribution and resource trade-offs, and run adjustable power-bench experiments. They can save eight local designs, overlay a saved design's battery curve, share design JSON, and fly their assembled spacecraft in the 2.5D game. Sandbox costs are informational; the preset expedition remains budget constrained.
+
 ## Playable expedition update
 The main experience is now Orbital Expedition, a real-time 2.5D game with keyboard and touch controls. Players configure their satellite within a budget, scan three regions, avoid debris, manage energy in sunlight and eclipse, and deliver six packets to a relay. Hardware choices affect scan time, power, storage and maneuverability. The detailed mission-design lab remains available as a companion learning tool. The arcade model is intentionally scaled and does not simulate orbital mechanics. The Earth environment is AI-generated and visibly labeled.
 

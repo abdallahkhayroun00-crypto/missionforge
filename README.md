@@ -24,6 +24,17 @@ Open http://localhost:8000. Use a server rather than opening index.html directly
 npm test
 ```
 
+## Spacecraft Workshop — build, experiment, fly
+
+The main entry now opens `shipyard.html`: a freely editable 5×5 isometric deck with a fixed computer core and seven selectable module types. Fit connected solar wings, batteries, one camera, one radio, thrusters and optional protective shells. Costs are shown for comparison; this creative sandbox has no 105-credit cap. Preset quick expeditions retain that cap.
+
+- Place/remove modules and rotate the view; review connectivity, mass, mass center, energy, hull and maneuverability.
+- Run a 180-second power-bench experiment with adjustable imaging duty and eclipse fraction.
+- Save up to eight named designs locally, compare battery curves, or export/import design JSON files.
+- Launch the actual assembled craft in the orbital game with its calculated hardware. Refit returns to the workshop with the same design.
+
+Storage is local to this browser and origin; it is not an online account or cloud save. JSON export is the portable backup/share format. Sandbox specifications and arcade behavior are fictional teaching parameters, documented in SOURCES.md.
+
 ## Play — Orbital Expedition
 
 The main page is a 2.5D canvas game with a generated Earth background, projected spacecraft and depth-sorted debris. Choose a camera, solar wings and battery within 105 credits, then pilot the satellite using WASD/arrows or touch controls.

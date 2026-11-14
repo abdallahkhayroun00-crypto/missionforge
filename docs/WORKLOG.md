@@ -30,3 +30,13 @@
 - Added arcade-model tests including a complete movement route with active debris and default hardware that delivers all six packets.
 - Updated presentation and submission documentation to distinguish arcade rules from the engineering lab model and disclose generated art.
 - Browser runtime remained unavailable; rendering and real-device input still need visual verification. Model tests do not substitute for that check.
+
+## 2026-11-14 — modular spacecraft sandbox
+- Prioritized free spacecraft construction and engineering experiments following the owner's preference.
+- Added a 5×5 isometric workshop with placement, removal, view rotation, fixed core and seven module types; validated orthogonal connectivity and required systems.
+- Computed total mass, mass center, storage, generation, hull protection and an explicitly illustrative control factor from the actual layout.
+- Added a 180-second power bench with imaging duty/eclipse controls, first-depletion reporting and comparison against saved designs.
+- Added eight local fleet slots, replacement by name, loading/deletion, JSON import/export and blocked-storage handling.
+- Integrated workshop craft into flight: module layout renders on the ship; calculated hardware drives power, mass, movement and health. Refit returns the current craft to the workshop.
+- Updated homepage, project deck, README, sources and submission draft. Documented local-only persistence and differences between bench, arcade and detailed lab models.
+- Verification: 27 automated model tests; DOM smoke checks for workshop save/load/compare/launch transfer and game setup/pause/refit. A continuous flight with the starter workshop craft succeeds while avoiding the central debris on its return route. Visual device testing remains outstanding because the browser runtime is unavailable.

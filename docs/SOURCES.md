@@ -46,3 +46,13 @@ DM Sans and Space Grotesk are requested through Google Fonts; system fonts work 
 The main page now uses a separate real-time educational arcade model in flight-engine.js. Its 2.5D projection, direct movement, collision health, 150-second timer, scan packets and relay are game mechanics rather than an orbital trajectory solution. Battery energy changes by (sunlight generation − bus − movement − active instrument/downlink demand) × elapsed time. Left-side eclipse has zero generation. Camera scan time and power, battery capacity, solar generation and hardware mass influence play. Movement speed = 100 / (1 + mass/90), an intentionally fictional maneuverability rule, not a propulsion equation. Three survey beacons each yield exactly two packets; only downlinked packets count toward success. The lab equations above apply only to lab.html.
 
 Environment artwork was generated with OpenAI image generation and converted to JPEG for web delivery. It is labeled AI-generated in the game and carries no NASA branding.
+
+## Modular spacecraft workshop
+
+The 5×5 deck has a fixed core. Orthogonally neighboring modules must connect to that core; diagonal contact alone is insufficient. Exactly one camera and one antenna, at least one solar wing, battery and thruster are required for launch. Sandbox cost is informational and does not impose the preset mission's budget cap.
+
+Mass and cost sum across fitted parts. Solar generation and usable battery capacity sum across solar/battery modules. A shell adds one hull point, capped at five. The core draws 2 energy units/second. Mass center is the mass-weighted mean of grid coordinates. Arcade control factor = max(0.65, 1 − distance of mass center from core × 0.15); speed = 100/(1+mass/90) × min(1.5,0.75+thruster count×0.25) × control factor. These control rules illustrate trade-offs and are not spacecraft inertia/torque equations.
+
+The bench starts with a full battery and integrates one-second energy steps through repeating 60-second sunlight/eclipsing cycles. Imaging uses its selected duty factor; radio and propulsion are off. It reports first battery depletion even if later sunlight restores charge. Invalid/disconnected drafts may be studied under an ideal connected-bus assumption but cannot launch. The flight model instead uses actual player movement, scanning and radio actions.
+
+Designs are validated before import, storage and flight. Fleet storage is limited to eight entries, with names truncated to 40 characters. Saving an existing name replaces it. Browser storage can be blocked or cleared; export JSON for a portable copy.

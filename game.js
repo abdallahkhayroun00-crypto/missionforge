@@ -40,13 +40,12 @@ function renderRoute(){
  $('#route-count').textContent=done+'/'+s.sites.length;
  const next=s.sites.find(site=>site.remaining>0)||s.relay;
  const name=next===s.relay?(ar?'محطة الإرسال':'Data relay'):localizedRegion(next,ar);
- const dist=next===s.relay?
-  Math.round(distance(s,next)*3.4/10)*10:formatKm(s,next);
+ const dist=formatKm(s,next===s.relay?c.relay:next);
  $('#journey-target').textContent=name;
  const gameSeconds=Math.ceil(distance(s,next)/(8.2/(1+s.spec.mass/90)*(s.spec.speedFactor||1)));
  $('#journey-distance').textContent=ar?
-  (next===s.relay?'المسافة على الخريطة: ':'المسافة الجغرافية نحو الهدف: ')+dist+' كم · '+gameSeconds+' ث وقت لعب':
-  (next===s.relay?'Map distance ~':'Geographic distance ~')+dist+' km · '+gameSeconds+' s game travel';
+  'المسافة الجغرافية نحو الهدف: '+dist+' كم · '+gameSeconds+' ث وقت لعب':
+  'Geographic distance ~'+dist+' km · '+gameSeconds+' s game travel';
  const html=s.sites.map(site=>{
    const blocked=isObscured(s,site),completed=site.remaining===0;
    const state=completed?(ar?'تم الرصد':'Scanned'):blocked?hazardName(site.hazard,ar):(ar?'جاهز للرصد':'Visible');

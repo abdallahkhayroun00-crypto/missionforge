@@ -35,8 +35,14 @@ A higher orbit has an assumed resolution penalty and a longer assumed contact wi
 
 ## AI assistance
 
-AI tools (OpenAI Codex) assisted with code, tests, documentation, interface text and presentation drafting. Source comments and repository documentation identify this assistance. No generated photographs, audio, video or NASA branding are used; the UI illustration is code-authored SVG. If a video or generated media is produced later, add the required disclosure and media labeling. Team members must verify accuracy and adapt this disclosure to their actual final use.
+AI tools (OpenAI Codex) assisted with code, tests, documentation, interface text and presentation drafting. Source comments and repository documentation identify this assistance. An AI-generated Earth environment is used in the arcade game with a visible in-game label. No generated audio, video or NASA branding are used. The engineering lab illustration is code-authored SVG. If a video or generated media is produced later, add the required disclosure and media labeling. Team members must verify accuracy and adapt this disclosure to their actual final use.
 
 ## External assets
 
-DM Sans and Space Grotesk are requested through Google Fonts; system fonts work offline. No external image assets are used. NASA names are used only to identify the challenge and source materials, without implying endorsement.
+DM Sans and Space Grotesk are requested through Google Fonts; system fonts work offline. The original generated Earth environment is bundled as assets/orbit-earth.jpg; it is artistic, not NASA imagery or measured data. NASA names are used only to identify the challenge and source materials, without implying endorsement.
+
+## Orbital Expedition arcade mode
+
+The main page now uses a separate real-time educational arcade model in flight-engine.js. Its 2.5D projection, direct movement, collision health, 150-second timer, scan packets and relay are game mechanics rather than an orbital trajectory solution. Battery energy changes by (sunlight generation − bus − movement − active instrument/downlink demand) × elapsed time. Left-side eclipse has zero generation. Camera scan time and power, battery capacity, solar generation and hardware mass influence play. Movement speed = 100 / (1 + mass/90), an intentionally fictional maneuverability rule, not a propulsion equation. Three survey beacons each yield exactly two packets; only downlinked packets count toward success. The lab equations above apply only to lab.html.
+
+Environment artwork was generated with OpenAI image generation and converted to JPEG for web delivery. It is labeled AI-generated in the game and carries no NASA branding.

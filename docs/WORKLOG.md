@@ -21,3 +21,12 @@
 - Added per-objective badges for viable designs and a separate four-question learning score. Repeating a goal does not duplicate badges; quiz answers never alter simulation physics.
 - Supports closing/reopening, keyboard-native controls, small screens and reduced-motion preference. Orbit animation is illustrative, not a trajectory simulation.
 - Verified model regression tests and DOM academy progression, correct/wrong answers, repeated sessions, scoring and unique badges. Visual browser testing remains outstanding.
+
+## 2026-11-14 — Orbital Expedition 2.5D rebuild
+- Replaced the landing experience with an actual real-time canvas game. Preserved the companion engineering designer at lab.html.
+- Added commissioned AI-generated Earth art, isometric projected spacecraft with solar wings, depth-sorted debris, survey beacons, eclipse shading and a relay.
+- Added keyboard/touch movement, held scan/downlink actions, stabilization requirements, health/collision grace time, battery charge/discharge, pause, victory/failure and refitting.
+- Hardware loadout affects scan rate, draw, capacity, charging and movement; budget prohibits selecting every upgrade.
+- Added arcade-model tests including a complete movement route with active debris and default hardware that delivers all six packets.
+- Updated presentation and submission documentation to distinguish arcade rules from the engineering lab model and disclose generated art.
+- Browser runtime remained unavailable; rendering and real-device input still need visual verification. Model tests do not substitute for that check.

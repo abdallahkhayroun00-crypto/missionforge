@@ -17,7 +17,10 @@ Use the seven-slide deck at `docs/presentation.html`, or export it to a seven-pa
 ## Final project link
 Replace with the verified live site URL after hosting is enabled. Also include https://github.com/abdallahkhayroun00-crypto/missionforge as the source repository. Do not submit an expected Pages URL before testing that it is live and public.
 
-## Detailed description
+## Playable expedition update
+The main experience is now Orbital Expedition, a real-time 2.5D game with keyboard and touch controls. Players configure their satellite within a budget, scan three regions, avoid debris, manage energy in sunlight and eclipse, and deliver six packets to a relay. Hardware choices affect scan time, power, storage and maneuverability. The detailed mission-design lab remains available as a companion learning tool. The arcade model is intentionally scaled and does not simulate orbital mechanics. The Earth environment is AI-generated and visibly labeled.
+
+## Detailed description — companion engineering lab
 The player acts as a mission designer in a small satellite program. Three objectives create different instrument and data needs. Six hardware and orbit categories offer choices with consequences that are immediately reflected in resource meters. The launch action evaluates six explicit engineering constraints and explains how the player can improve each failed check.
 
 A simplified circular-orbit model estimates period and eclipse duration. Sunlight generation, average consumption and eclipse storage are evaluated separately, showing why a large battery cannot compensate indefinitely for insufficient solar power. Radio throughput and assumed ground-contact time determine data return. Instrument compatibility connects the engineering design back to the scientific goal.
@@ -31,7 +34,7 @@ The official challenge Resources tab guided the use of mission objectives, syste
 HTML, CSS, JavaScript, inline SVG, Python's development HTTP server, Node.js built-in test runner, GitHub and Google Fonts (DM Sans, Space Grotesk). See docs/SOURCES.md for model equations, NASA references, asset attribution and limitations.
 
 ## AI use disclosure
-OpenAI Codex assisted with implementation, tests, documentation, interface copy and presentation drafting. The team must review the result, source attribution and final disclosure before submission. No generated photographic, audio or video assets or NASA logos are included.
+OpenAI Codex assisted with implementation, tests, documentation, interface copy and presentation drafting. The team must review the result, source attribution and final disclosure before submission. The main game includes a visibly labeled AI-generated Earth environment. No NASA logos or generated audio/video assets are included.
 
 ## Checklist
 - Confirm the spelling of Atlas Tech and all three member names before submitting.

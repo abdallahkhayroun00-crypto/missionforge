@@ -24,15 +24,16 @@ Open http://localhost:8000. Use a server rather than opening index.html directly
 npm test
 ```
 
-## Play
+## Play — Orbital Expedition
 
-1. Choose coastal mapping, wildfire heat tracking, or a broad Earth survey.
-2. Choose the instrument, solar array, battery, radio, launcher, and orbit.
-3. Review live budget, mass, energy, and battery meters.
-4. Select **Simulate mission** to receive six engineering checks and explanations.
-5. Refine the design and try again. **Load a viable example** gives a working starting point for the selected objective.
+The main page is a 2.5D canvas game with a generated Earth background, projected spacecraft and depth-sorted debris. Choose a camera, solar wings and battery within 105 credits, then pilot the satellite using WASD/arrows or touch controls.
 
-The simulation is deterministic and educational, not flight engineering software. Costs, component specifications, contact durations and data units are illustrative. There are 288 possible mission configurations; the model includes orbit period, simplified eclipse duration, energy balance, storage, downlink and scientific compatibility.
+- Stop near each cyan survey beacon and hold Space / SCAN to collect two packets.
+- Avoid moving debris and the dark eclipse region when energy is low.
+- Return to the relay and hold E / TRANSMIT to deliver all six packets within 150 seconds.
+- Pause and refit between runs. Heavier hardware moves more slowly; fast sensors consume more power; solar arrays recharge only in sunlight.
+
+The arcade model uses deliberately scaled fictional units, geometry and timing. It is not orbital flight dynamics. The original detailed mission designer remains available through **Engineering lab** at `lab.html`, with its separate orbit-energy model, six checks and three objectives. The two modes are complementary educational activities, not interchangeable numerical simulations.
 
 ## Project materials
 

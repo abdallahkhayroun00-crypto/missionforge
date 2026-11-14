@@ -1,4 +1,4 @@
-import {outlines} from './country-outlines.js';
+import {outlines,moroccoContinuousOutline} from './country-outlines.js';
 import {getCountry,pointFor,isObscured,localizedRegion,localizedCountry} from './country-missions.js';
 
 // Dedicated north-up atlas view. Geography is anchored to approximate WGS84
@@ -14,7 +14,7 @@ function roundRect(ctx,x,y,w,h,r){
 export function viewport(width,height,countryId,preview){
   const country=getCountry(countryId),mobile=width<820;
   const region=countryId==='morocco'
-    ?[...outlines.morocco,...outlines.westernSahara]
+    ?moroccoContinuousOutline
     :outlines[countryId]||outlines.morocco;
   const coordinates=region.flat();
   const geoXs=coordinates.map(([lon,lat])=>pointFor(country,lat,lon).x);
@@ -88,10 +88,10 @@ function drawCanvasBackdrop(ctx,width,height,country,ar,preview,view,seconds){
   ctx.restore();
 }
 function drawLand(ctx,countryId,country,view,seconds){
-  // Keep the complete geographic area visible with a single clean fill;
-  // no internal administrative or boundary markings are drawn for Morocco.
+  // Draw a dissolved silhouette. Tracing two adjoining polygons used to
+  // leave a solid internal line and a visible seam near Dakhla.
   const polygons=countryId==='morocco'
-    ?[...outlines.morocco,...outlines.westernSahara]
+    ?moroccoContinuousOutline
     :outlines[countryId]||outlines.morocco;
   traceOutline(ctx,polygons,country,view);
   ctx.save();
@@ -124,7 +124,7 @@ function drawLand(ctx,countryId,country,view,seconds){
 
   }
   ctx.restore();
-  const outerLines=countryId==='morocco'?outlines.morocco:polygons;
+  const outerLines=polygons;
   ctx.save();traceOutline(ctx,outerLines,country,view);ctx.lineWidth=2.6;ctx.strokeStyle='#c6e4ce99';ctx.stroke();
   traceOutline(ctx,outerLines,country,view);ctx.lineWidth=.75;ctx.strokeStyle='#ffffff55';ctx.stroke();ctx.restore();
 }

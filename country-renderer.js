@@ -72,11 +72,13 @@ function drawCanvasBackdrop(ctx,width,height,country,ar,preview,view,seconds){
   const haze=ctx.createRadialGradient(view.cx,view.cy,70,view.cx,view.cy,Math.max(width,height)*.65);
   haze.addColorStop(0,'#28605b38');haze.addColorStop(1,'#07101d00');
   ctx.fillStyle=haze;ctx.fillRect(0,0,width,height);
-  // Restrained atlas graticule rather than a fake tilted ground plane.
-  ctx.save();ctx.strokeStyle='#9bbdb810';ctx.lineWidth=1;
-  for(let x=35;x<width;x+=48){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,height);ctx.stroke();}
-  for(let y=20;y<height;y+=48){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(width,y);ctx.stroke();}
-  ctx.restore();
+  // Morocco uses a clean, uninterrupted silhouette without cartographic grid lines.
+  if(country!==getCountry('morocco')){
+    ctx.save();ctx.strokeStyle='#9bbdb810';ctx.lineWidth=1;
+    for(let x=35;x<width;x+=48){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,height);ctx.stroke();}
+    for(let y=20;y<height;y+=48){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(width,y);ctx.stroke();}
+    ctx.restore();
+  }
   ctx.save();ctx.fillStyle='#e9c797';ctx.textAlign='left';
   ctx.font='600 10px "DM Sans",sans-serif';
   const top=ar?'خريطة المهمة / أطلس فضائي':'MISSION CARTOGRAPHY / ATLAS 01';
@@ -86,8 +88,8 @@ function drawCanvasBackdrop(ctx,width,height,country,ar,preview,view,seconds){
   ctx.restore();
 }
 function drawLand(ctx,countryId,country,view,seconds){
-  // Keep the complete southern outline visible. An internal dashed division
-  // marks the territory whose political status is disputed.
+  // Keep the complete geographic area visible with a single clean fill;
+  // no internal administrative or boundary markings are drawn for Morocco.
   const polygons=countryId==='morocco'
     ?[...outlines.morocco,...outlines.westernSahara]
     :outlines[countryId]||outlines.morocco;
@@ -103,29 +105,28 @@ function drawLand(ctx,countryId,country,view,seconds){
   const light=ctx.createRadialGradient(view.cx-view.mapW*.32,view.cy-view.mapH*.3,5,view.cx,view.cy,view.mapH*.9);
   light.addColorStop(0,'#a9ccb81d');light.addColorStop(1,'#091e2828');ctx.fillStyle=light;
   ctx.fillRect(view.cx-view.mapW,view.cy-view.mapH,view.mapW*2,view.mapH*2);
-  // Contour-like diagonal strokes are purely decorative, not real terrain.
-  ctx.strokeStyle='#cae6ce13';ctx.lineWidth=1;
-  for(let n=-600;n<800;n+=35){
-    ctx.beginPath();ctx.moveTo(view.cx+n,view.cy-view.mapH);
-    ctx.lineTo(view.cx+n+view.mapH*.53,view.cy+view.mapH);ctx.stroke();
-  }
-  for(let lon=Math.ceil(country.bounds.west/2)*2;lon<country.bounds.east;lon+=2){
-    const a=view.fromGeo(country,country.bounds.south,lon),b=view.fromGeo(country,country.bounds.north,lon);
-    ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle='#c4e2d516';ctx.stroke();
-  }
-  for(let lat=Math.ceil(country.bounds.south/2)*2;lat<country.bounds.north;lat+=2){
-    const a=view.fromGeo(country,lat,country.bounds.west),b=view.fromGeo(country,lat,country.bounds.east);
-    ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle='#c4e2d516';ctx.stroke();
+  // Decorative graticules and crosshatching are omitted in the Morocco view.
+  if(countryId!=='morocco'){
+    // Contour-like diagonal strokes are purely decorative, not real terrain.
+    ctx.strokeStyle='#cae6ce13';ctx.lineWidth=1;
+    for(let n=-600;n<800;n+=35){
+      ctx.beginPath();ctx.moveTo(view.cx+n,view.cy-view.mapH);
+      ctx.lineTo(view.cx+n+view.mapH*.53,view.cy+view.mapH);ctx.stroke();
+    }
+    for(let lon=Math.ceil(country.bounds.west/2)*2;lon<country.bounds.east;lon+=2){
+      const a=view.fromGeo(country,country.bounds.south,lon),b=view.fromGeo(country,country.bounds.north,lon);
+      ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle='#c4e2d516';ctx.stroke();
+    }
+    for(let lat=Math.ceil(country.bounds.south/2)*2;lat<country.bounds.north;lat+=2){
+      const a=view.fromGeo(country,lat,country.bounds.west),b=view.fromGeo(country,lat,country.bounds.east);
+      ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle='#c4e2d516';ctx.stroke();
+    }
+
   }
   ctx.restore();
   const outerLines=countryId==='morocco'?outlines.morocco:polygons;
   ctx.save();traceOutline(ctx,outerLines,country,view);ctx.lineWidth=2.6;ctx.strokeStyle='#c6e4ce99';ctx.stroke();
   traceOutline(ctx,outerLines,country,view);ctx.lineWidth=.75;ctx.strokeStyle='#ffffff55';ctx.stroke();ctx.restore();
-  if(countryId==='morocco'){
-    // Separate dashed internal line acknowledges the region's disputed status.
-    ctx.save();traceOutline(ctx,outlines.westernSahara,country,view);
-    ctx.setLineDash([4,7]);ctx.lineWidth=1.15;ctx.strokeStyle='#e7d1aa8e';ctx.stroke();ctx.restore();
-  }
 }
 function drawRoute(ctx,sites,relay,view,preview){
   const points=[...sites,relay].map(p=>view.project(p));
@@ -245,8 +246,11 @@ export function renderCountryAtlas(ctx,width,height,flight,previewCountry,ar,pre
     ctx.restore();
     return;
   }
-  drawRoute(ctx,flight.sites,flight.relay,view,preview);
-  drawTrail(ctx,flight,view);
+  // No route or trail stripes over Morocco's solid land shape.
+  if(countryId!=='morocco'){
+    drawRoute(ctx,flight.sites,flight.relay,view,preview);
+    drawTrail(ctx,flight,view);
+  }
   drawDebris(ctx,flight,view);
   drawTargets(ctx,flight,view,ar,preview);
   drawShip(ctx,flight,view,ar);

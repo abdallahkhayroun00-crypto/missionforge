@@ -60,3 +60,109 @@ html[dir="rtl"] .route-stop small,html[dir="rtl"] .route-note{font-size:10px}
 .route-stop.complete small.route-condition{color:#94d5ad}
 .mission-sources{font-size:11px;margin-top:16px}
 .mission-sources a{color:#e9c18a;text-decoration:underline;text-underline-offset:3px}
+
+/* V2 COUNTRY ATLAS — the geography, not an orbit photograph, is the hero. */
+#arena.atlas-mode{height:calc(100dvh - 70px);min-height:770px;background:#071e2a}
+#arena.atlas-mode .vignette{background:linear-gradient(90deg,#06182525,transparent 55%)}
+#arena.atlas-mode #world{background:#071b29}
+#arena.atlas-mode .hud{top:20px;left:22px;right:22px;display:flex;align-items:stretch;gap:9px;z-index:5}
+#arena.atlas-mode .hud>div{
+ min-width:113px;display:flex;flex-direction:column;justify-content:center;
+ border:1px solid #50778275;border-radius:9px;padding:10px 14px;
+ background:linear-gradient(150deg,#102c39ed,#0a1f2ce8);box-shadow:0 6px 22px #020c1580;
+ backdrop-filter:blur(9px)
+}
+#arena.atlas-mode .hud small{font-size:9px;color:#9dc0c8;letter-spacing:1.15px;line-height:1.5}
+#arena.atlas-mode .hud strong{font-size:29px;color:#f1f4ed;line-height:1.2;margin:4px 0 0}
+#arena.atlas-mode .hud progress{height:4px;width:100%;margin-top:7px;accent-color:#a9e6cf}
+#arena.atlas-mode .hud button{
+ align-self:flex-start;margin-left:auto;margin-right:0;border:1px solid #65828d8c;
+ border-radius:7px;background:#112e3ec9;color:#d8e8e7;padding:12px 14px;
+ font-size:11px;box-shadow:0 5px 18px #020c1655
+}
+#arena.atlas-mode .hud button:hover{background:#264958}
+#arena.atlas-mode .mission-route{
+ top:111px;bottom:123px;right:22px;width:292px;max-height:none;z-index:4;
+ border:1px solid #62858c95;border-radius:11px;padding:16px 14px;
+ background:linear-gradient(155deg,#0c2632f5,#0a1e2af5);
+ box-shadow:0 18px 50px #0008;scrollbar-width:thin;scrollbar-color:#67849066 transparent
+}
+#arena.atlas-mode .mission-route .route-top{font-size:10px;color:#ddb883;letter-spacing:1.2px}
+#arena.atlas-mode .mission-route .route-top strong{font-size:18px;color:#a8e2d5}
+#arena.atlas-mode .mission-route h2{font-size:28px;line-height:1.2;margin:7px 0 11px;color:#f0f4ed}
+#arena.atlas-mode .route-journey{
+ border:1px solid #4d817e8a;border-radius:8px;background:#173b42c7;
+ padding:11px 12px;margin:7px 0 14px;display:flex;flex-direction:column;gap:5px
+}
+#arena.atlas-mode .route-journey>span{font-size:9px;color:#d7c394;letter-spacing:1.2px;font-weight:700}
+#arena.atlas-mode .route-journey strong{font-size:15px;color:#ecf7ef;line-height:1.35}
+#arena.atlas-mode .route-journey small{font-size:10px;color:#9bc4cb;line-height:1.5}
+#arena.atlas-mode .route-stop{padding:12px 1px;gap:10px;border-top-color:#5774825e;align-items:flex-start}
+#arena.atlas-mode .route-stop .route-dot{margin-top:4px;width:28px;height:28px;flex-basis:28px;border-radius:50%;font-size:15px}
+#arena.atlas-mode .route-stop strong{font-size:12px}
+#arena.atlas-mode .route-stop small{font-size:10px;line-height:1.5}
+#arena.atlas-mode .route-stop small.route-condition{color:#e9bb89}
+#arena.atlas-mode .route-stop.complete small.route-condition{color:#98dfb5}
+#arena.atlas-mode .route-stop .route-data{padding:5px 0;font-size:12px;color:#a2ded5}
+#arena.atlas-mode .route-note{margin-top:10px;font-size:9px;line-height:1.7}
+#arena.atlas-mode .flight-footer{z-index:5;left:22px;right:336px;bottom:20px;align-items:end;gap:15px}
+#arena.atlas-mode .comms{
+ width:min(460px,100%);max-width:460px;padding:13px 16px;border:1px solid #46727f8c;
+ border-left:3px solid #e4c08c;border-radius:8px;
+ background:#081f2bde;backdrop-filter:blur(7px);box-shadow:0 6px 20px #0006
+}
+#arena.atlas-mode .comms p{font-size:12px;line-height:1.6}
+#arena.atlas-mode .comms span{font-size:10px;color:#a7dfcf}
+#arena.atlas-mode .actions button{
+ border-radius:8px;border:1px solid #8abbb4;
+ background:linear-gradient(150deg,#224b55ed,#122f3fed);
+ color:#f0f4f0;padding:16px 20px;min-width:92px;box-shadow:0 8px 20px #0005
+}
+#arena.atlas-mode .actions button:hover{background:#366773}
+#arena.atlas-mode .dpad{z-index:5;left:22px;bottom:134px;opacity:.9}
+#arena.atlas-mode .dpad button{background:#143646dc;border:1px solid #7fa9b188}
+#arena.atlas-mode .dpad button:active{background:#416b75}
+#arena.atlas-mode .dpad button:focus-visible,#arena.atlas-mode .actions button:focus-visible{outline:2px solid #f4c68a}
+html[dir="rtl"] #arena.atlas-mode .route-journey>span{letter-spacing:0;font-size:11px}
+html[dir="rtl"] #arena.atlas-mode .route-journey strong{font-family:'Noto Sans Arabic',sans-serif}
+html[dir="rtl"] #arena.atlas-mode .route-journey small{font-size:11px}
+html[dir="rtl"] #arena.atlas-mode .route-stop small{font-size:11px}
+html[dir="rtl"] #arena.atlas-mode .hud small{font-size:11px;letter-spacing:0}
+html[dir="rtl"] #arena.atlas-mode .comms{border-left:1px solid #46727f8c;border-right:3px solid #e4c08c}
+@media(max-width:1100px){
+ #arena.atlas-mode .mission-route{width:237px;right:12px;padding:12px}
+ #arena.atlas-mode .flight-footer{right:264px}
+ #arena.atlas-mode .hud{left:12px;right:12px}
+ #arena.atlas-mode .hud>div{min-width:90px;padding:8px 10px}
+ #arena.atlas-mode .hud strong{font-size:24px}
+ #arena.atlas-mode .route-stop{padding:8px 0}
+ #arena.atlas-mode .mission-route h2{font-size:23px}
+}
+@media(max-width:820px){
+ #arena.atlas-mode{height:980px;min-height:980px}
+ #arena.atlas-mode .hud{top:12px;left:9px;right:9px;gap:5px}
+ #arena.atlas-mode .hud>div{min-width:0;flex:1;padding:8px 5px;border-radius:6px}
+ #arena.atlas-mode .hud small{font-size:7px;letter-spacing:0;line-height:1.25}
+ #arena.atlas-mode .hud strong{font-size:18px;white-space:nowrap}
+ #arena.atlas-mode .hud button{font-size:10px;padding:8px 7px}
+ #arena.atlas-mode .mission-route{
+  width:auto;left:10px;right:10px;top:auto;bottom:140px;height:184px;max-height:184px;
+  padding:11px 14px;overflow-y:auto
+ }
+ #arena.atlas-mode .mission-route h2{font-size:20px;margin:3px 0 5px}
+ #arena.atlas-mode .route-journey{padding:7px 10px;margin:5px 0 8px;gap:1px}
+ #arena.atlas-mode .route-stop{padding:8px 0}
+ #arena.atlas-mode .route-stop small{font-size:10px}
+ #arena.atlas-mode .flight-footer{
+  left:10px;right:10px;bottom:13px;display:flex;flex-direction:row;
+  justify-content:space-between;align-items:flex-end;gap:8px
+ }
+ #arena.atlas-mode .comms{flex:1;min-width:0;padding:9px 10px}
+ #arena.atlas-mode .comms p{font-size:10px;line-height:1.5}
+ #arena.atlas-mode .comms span{font-size:9px}
+ #arena.atlas-mode .actions{gap:5px;flex-direction:column}
+ #arena.atlas-mode .actions button{min-width:84px;padding:9px 8px;font-size:10px}
+ #arena.atlas-mode .actions kbd{margin-top:2px}
+ #arena.atlas-mode .dpad{left:10px;bottom:337px}
+ #arena.atlas-mode .dpad button{width:39px;height:37px;font-size:19px}
+}

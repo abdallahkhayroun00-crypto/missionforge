@@ -2,6 +2,15 @@
 (() => {
   const STORAGE_KEY='missionforge.language';
   const ar={
+    "NEXT WAYPOINT":"الوجهة التالية",
+    "Country mission map with real location markers. Use WASD or the arrow keys to travel, hold Space to scan, and E to transmit.":"خريطة مهمة الرصد، وتظهر فيها مواقع المدن الفعلية. استخدم مفاتيح WASD أو الأسهم للتنقّل، واستمر بالضغط على Space للرصد وE لإرسال البيانات.",
+    "WASD / arrows to travel · Hold Space to scan · Hold E to transmit.":"تحرّك بـ WASD أو الأسهم · اضغط مطوّلًا على Space للرصد · وعلى E لإرسال البيانات.",
+    "Travel between marked cities, stop at each target and hold the scan control. Clouds or dust can temporarily block optical imaging. Solar charging stops during the timed eclipse. Avoid the moving debris and deliver all eight packets at the relay.":"انتقل بين المدن الظاهرة على الخريطة. توقّف داخل دائرة كل هدف واضغط مطوّلًا على زر الرصد. قد تمنع الغيوم أو الأتربة التصوير مؤقتًا، ويتوقف الشحن الشمسي أثناء المرور في ظل الأرض. تجنّب الحطام المتحرك وأرسل الحزم الثماني من محطة الاتصال.",
+    "Travel to all four city markers. Stop within a scan ring, then hold Space or SCAN to collect two packets per city. Each scan takes several seconds.":"مرّ بالمدن الأربع. عند الوصول إلى دائرة الرصد، ثبّت المركبة واضغط مطوّلًا على Space أو زر «رصد» لجمع حزمتين من كل مدينة. تحتاج كل عملية رصد إلى عدة ثوانٍ.",
+    "Clouds, haze and dust can block optical scans. Save battery for the eclipse; wait in sunlight to recharge when needed.":"الغيوم والضباب والغبار قد تحجب التصوير البصري. حافظ على شحن البطارية قبل دخول ظل الأرض، وتوقّف في ضوء الشمس لإعادة الشحن عند الحاجة.",
+    "Reach the data relay station and hold E or TRANSMIT to send all eight packets. Transmission also takes time.":"اذهب إلى محطة إرسال البيانات واستمر بالضغط على E أو زر «إرسال» لنقل الحزم الثماني. عملية الإرسال تحتاج إلى وقت أيضًا.",
+    "Complete the country mission within 300 game seconds. Location coordinates are approximate; the map, travel time, eclipses, weather and debris are educational gameplay, not live orbital or weather data.":"أكمل المهمة خلال 300 ثانية داخل اللعبة. مواقع المدن تقريبية، أما أزمنة التنقّل والمرور في الظل والطقس والحطام فهي عناصر محاكاة تعليمية، وليست بيانات مدار أو طقس مباشرة.",
+
     "Geography, science and simulation notes ↗":"ملاحظات حول الجغرافيا والنموذج العلمي والمحاكاة ↗",
     "REGIONAL MISSION":"مهمة الرصد",
     "01 / CHOOSE COUNTRY":"01 / اختر البلد",

@@ -1,0 +1,199 @@
+import {outlines} from './country-outlines.js';
+import {getCountry,pointFor,isObscured,localizedRegion,localizedCountry} from './country-missions.js';
+
+// Dedicated north-up atlas view. Geography is anchored to approximate WGS84
+// city coordinates. Gameplay traversal is intentionally NOT orbital physics.
+const TWO_PI=Math.PI*2;
+function roundRect(ctx,x,y,w,h,r){
+  const q=Math.min(r,w/2,h/2);ctx.beginPath();
+  ctx.moveTo(x+q,y);ctx.arcTo(x+w,y,x+w,y+h,q);ctx.arcTo(x+w,y+h,x,y+h,q);
+  ctx.arcTo(x,y+h,x,y,q);ctx.arcTo(x,y,x+w,y,q);ctx.closePath();
+}
+function viewport(width,height,countryId,preview){
+  const mobile=width<820;
+  const reserved=preview?0:(mobile?0:width<1100?240:287);
+  const area=width-reserved;
+  const xFactor=countryId==='turkiye'?1.17:countryId==='morocco'?.82:.94;
+  const yFactor=countryId==='turkiye'?.72:1;
+  const head=preview?124:mobile?96:106;
+  const foot=preview?54:mobile?260:125;
+  const available=Math.max(260,height-head-foot);
+  const scale=Math.min((Math.max(340,area)-74)/(420*xFactor),available/(350*yFactor));
+  const cx=preview?width*.74:area*.505;
+  const cy=preview?height*.56:head+available*.5;
+  return {
+    mapW:420*xFactor*scale,mapH:350*yFactor*scale,scale,
+    project(world){return {x:cx+world.x*scale*xFactor,y:cy+world.z*scale*yFactor};},
+    fromGeo(country,lat,lon){return this.project(pointFor(country,lat,lon));},
+    cx,cy,area,mobile
+  };
+}
+function traceOutline(ctx,shape,country,view){
+  ctx.beginPath();
+  for(const polygon of shape){
+    polygon.forEach(([lon,lat],i)=>{
+      const p=view.fromGeo(country,lat,lon);
+      if(i===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y);
+    });
+    ctx.closePath();
+  }
+}
+function drawCanvasBackdrop(ctx,width,height,country,ar,preview,view,seconds){
+  const bg=ctx.createLinearGradient(0,0,width,height);
+  bg.addColorStop(0,'#061b2b');bg.addColorStop(.65,'#0c2738');bg.addColorStop(1,'#102d38');
+  ctx.fillStyle=bg;ctx.fillRect(0,0,width,height);
+  const haze=ctx.createRadialGradient(view.cx,view.cy,70,view.cx,view.cy,Math.max(width,height)*.65);
+  haze.addColorStop(0,'#28605b38');haze.addColorStop(1,'#07101d00');
+  ctx.fillStyle=haze;ctx.fillRect(0,0,width,height);
+  // Restrained atlas graticule rather than a fake tilted ground plane.
+  ctx.save();ctx.strokeStyle='#9bbdb810';ctx.lineWidth=1;
+  for(let x=35;x<width;x+=48){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,height);ctx.stroke();}
+  for(let y=20;y<height;y+=48){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(width,y);ctx.stroke();}
+  ctx.restore();
+  ctx.save();ctx.fillStyle='#e9c797';ctx.textAlign='left';
+  ctx.font='600 10px "DM Sans",sans-serif';
+  const top=ar?'خريطة المهمة / أطلس فضائي':'MISSION CARTOGRAPHY / ATLAS 01';
+  ctx.fillText(top,25,preview?38:70);
+  ctx.fillStyle='#9ebfc8';ctx.font=ar?'500 12px "Noto Sans Arabic",sans-serif':'500 11px "DM Sans",sans-serif';
+  ctx.fillText(ar?'المناطق الحقيقية · مسار تنقّل مبسّط':'REAL REGIONS  /  SIMULATED MISSION ROUTE',25,preview?59:89);
+  ctx.restore();
+}
+function drawLand(ctx,countryId,country,view,seconds){
+  const polygons=outlines[countryId]||outlines.morocco;
+  traceOutline(ctx,polygons,country,view);
+  ctx.save();
+  ctx.shadowColor='#6ecebb35';ctx.shadowBlur=34;
+  const land=ctx.createLinearGradient(view.cx-view.mapW*.5,view.cy-view.mapH*.5,view.cx+view.mapW*.6,view.cy+view.mapH*.6);
+  land.addColorStop(0,'#426f6b');land.addColorStop(.42,'#315d5e');land.addColorStop(1,'#243f46');
+  ctx.fillStyle=land;ctx.fill();ctx.restore();
+  ctx.save();
+  traceOutline(ctx,polygons,country,view);
+  ctx.clip();
+  const light=ctx.createRadialGradient(view.cx-view.mapW*.32,view.cy-view.mapH*.3,5,view.cx,view.cy,view.mapH*.9);
+  light.addColorStop(0,'#a9ccb81d');light.addColorStop(1,'#091e2828');ctx.fillStyle=light;
+  ctx.fillRect(view.cx-view.mapW,view.cy-view.mapH,view.mapW*2,view.mapH*2);
+  // Contour-like diagonal strokes are purely decorative, not real terrain.
+  ctx.strokeStyle='#cae6ce13';ctx.lineWidth=1;
+  for(let n=-600;n<800;n+=35){
+    ctx.beginPath();ctx.moveTo(view.cx+n,view.cy-view.mapH);
+    ctx.lineTo(view.cx+n+view.mapH*.53,view.cy+view.mapH);ctx.stroke();
+  }
+  for(let lon=Math.ceil(country.bounds.west/2)*2;lon<country.bounds.east;lon+=2){
+    const a=view.fromGeo(country,country.bounds.south,lon),b=view.fromGeo(country,country.bounds.north,lon);
+    ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle='#c4e2d516';ctx.stroke();
+  }
+  for(let lat=Math.ceil(country.bounds.south/2)*2;lat<country.bounds.north;lat+=2){
+    const a=view.fromGeo(country,lat,country.bounds.west),b=view.fromGeo(country,lat,country.bounds.east);
+    ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle='#c4e2d516';ctx.stroke();
+  }
+  ctx.restore();
+  ctx.save();traceOutline(ctx,polygons,country,view);ctx.lineWidth=2.6;ctx.strokeStyle='#c6e4ce99';ctx.stroke();
+  traceOutline(ctx,polygons,country,view);ctx.lineWidth=.75;ctx.strokeStyle='#ffffff55';ctx.stroke();ctx.restore();
+  if(countryId==='morocco'){
+    // Separate dashed internal line acknowledges the region's disputed status.
+    ctx.save();traceOutline(ctx,outlines.westernSahara,country,view);
+    ctx.setLineDash([4,7]);ctx.lineWidth=1.15;ctx.strokeStyle='#e7d1aa8e';ctx.stroke();ctx.restore();
+  }
+}
+function drawRoute(ctx,sites,relay,view,preview){
+  const points=[...sites,relay].map(p=>view.project(p));
+  if(points.length<2)return;
+  ctx.save();ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));
+  ctx.setLineDash([6,8]);ctx.lineWidth=1.7;ctx.strokeStyle='#f3d5a76a';ctx.stroke();
+  ctx.setLineDash([]);ctx.fillStyle='#f9d6a2';
+  for(const p of points){ctx.beginPath();ctx.arc(p.x,p.y,2.6,0,TWO_PI);ctx.fill();}
+  ctx.restore();
+}
+function writePill(ctx,x,y,title,subtitle,ar,side,view,status){
+  const font=ar?'600 12px "Noto Sans Arabic",sans-serif':'600 12px "DM Sans",sans-serif';
+  const small=ar?'500 10px "Noto Sans Arabic",sans-serif':'500 10px "DM Sans",sans-serif';
+  ctx.font=font;const tw=ctx.measureText(title).width;
+  ctx.font=small;const sw=ctx.measureText(subtitle).width;
+  const w=Math.max(100,Math.min(184,Math.max(tw,sw)+28)),h=43;
+  let left=side==='left'?x-w-22:x+22,top=y-19;
+  if(side==='top'){left=x-w*.5;top=y-66;}
+  if(side==='bottom'){left=x-w*.5;top=y+23;}
+  left=Math.max(12,Math.min(view.area-18-w,left));
+  top=Math.max(120,Math.min(ctx.canvas.height-116-h,top));
+  ctx.save();
+  ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(side==='left'?left+w:side==='right'?left:Math.max(left,Math.min(left+w,x)),top+h/2);
+  ctx.strokeStyle=status==='blocked'?'#f3c386cc':'#a9e4dacc';ctx.lineWidth=1;ctx.stroke();
+  roundRect(ctx,left,top,w,h,8);
+  ctx.fillStyle=status==='done'?'#18382eea':'#102b37f2';ctx.fill();
+  ctx.strokeStyle=status==='blocked'?'#d6a16b9a':status==='done'?'#83c9a79a':'#4e82909c';ctx.stroke();
+  ctx.textAlign='left';ctx.fillStyle='#f3f6ed';ctx.font=font;ctx.fillText(title,left+12,top+17);
+  ctx.fillStyle=status==='blocked'?'#f4c28e':'#b4d1d4';ctx.font=small;ctx.fillText(subtitle,left+12,top+33);
+  ctx.restore();
+}
+function drawTargets(ctx,flight,view,ar,preview){
+  const c=getCountry(flight.countryId);
+  const active=flight.sites.find(s=>s.remaining>0);
+  flight.sites.forEach((site,i)=>{
+    const p=view.project(site),blocked=isObscured(flight,site),done=site.remaining===0;
+    const progress=site.initial-site.remaining,near=Math.hypot(flight.x-site.x,flight.z-site.z)<25;
+    const color=done?'#92d5b0':blocked?'#efbf82':'#7de1e2';
+    ctx.save();
+    ctx.beginPath();ctx.arc(p.x,p.y,13,0,TWO_PI);ctx.fillStyle='#072332df';ctx.fill();
+    ctx.lineWidth=2;ctx.strokeStyle='#274a4f';ctx.stroke();
+    ctx.beginPath();ctx.arc(p.x,p.y,16,-Math.PI/2,-Math.PI/2+TWO_PI*progress/site.initial);
+    ctx.lineWidth=3.5;ctx.strokeStyle=color;ctx.stroke();
+    if(site===active&&!done){ctx.beginPath();ctx.arc(p.x,p.y,23+Math.sin(flight.elapsed*2)*2,0,TWO_PI);ctx.lineWidth=1.2;ctx.strokeStyle='#ead39c88';ctx.stroke();}
+    ctx.fillStyle=color;ctx.font='700 13px "DM Sans",sans-serif';ctx.textAlign='center';ctx.fillText(done?'✓':blocked?'!':String(i+1),p.x,p.y+5);
+    ctx.restore();
+    const dir=site.id==='casablanca'?'top':site.id==='el-jadida'?'left':site.id==='berlin'?'left':site.id==='guelmim'?'right':'right';
+    const label=localizedRegion(site,ar),second=done?(ar?'اكتمل الرصد':'SCAN COMPLETE'):blocked?(ar?'الرؤية محجوبة':'VISIBILITY BLOCKED'):progress+'/2  '+(ar?'حزم بيانات':'PACKETS');
+    writePill(ctx,p.x,p.y,label,second,ar,dir,view,done?'done':blocked?'blocked':'ready');
+    if(blocked){
+      ctx.save();ctx.fillStyle='#f3c693bf';ctx.beginPath();ctx.arc(p.x+19,p.y-20,4,0,TWO_PI);ctx.fill();ctx.restore();
+    }
+    if(near&&!blocked&&!done){ctx.save();ctx.beginPath();ctx.arc(p.x,p.y,26,0,TWO_PI);ctx.lineWidth=2;ctx.strokeStyle='#e7dbadb3';ctx.stroke();ctx.restore();}
+  });
+  const p=view.project(flight.relay);
+  ctx.save();ctx.beginPath();ctx.arc(p.x,p.y,23,0,TWO_PI);ctx.fillStyle='#513e2988';ctx.fill();ctx.strokeStyle='#efc686';ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle='#ffe0a1';ctx.textAlign='center';ctx.font='700 17px "DM Sans",sans-serif';ctx.fillText('⇧',p.x,p.y+5);ctx.restore();
+  writePill(ctx,p.x,p.y,ar?'محطة إرسال البيانات':'DATA RELAY',ar?'اضغط E لإرسال البيانات':'HOLD E TO TRANSMIT',ar,'bottom',view,'ready');
+}
+function drawShip(ctx,flight,view,ar){
+  const p=view.project(flight);
+  const angle=Math.atan2(flight.headingZ||-1,flight.headingX||1)+Math.PI/2;
+  ctx.save();ctx.translate(p.x,p.y);ctx.rotate(angle);ctx.shadowColor='#7ef9e4';ctx.shadowBlur=20;
+  ctx.fillStyle='#0e2833';ctx.strokeStyle='#a9f5dc';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(0,-17);ctx.lineTo(11,13);ctx.lineTo(0,8);ctx.lineTo(-11,13);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.shadowBlur=0;ctx.fillStyle='#4c98a7';ctx.fillRect(-22,3,12,11);ctx.fillRect(10,3,12,11);
+  ctx.strokeStyle='#e4c58b';ctx.strokeRect(-22,3,12,11);ctx.strokeRect(10,3,12,11);
+  ctx.restore();
+  ctx.save();ctx.beginPath();ctx.arc(p.x,p.y,30,0,TWO_PI);ctx.strokeStyle='#9ce1d744';ctx.lineWidth=1.5;ctx.stroke();
+  ctx.fillStyle='#e4eade';ctx.font=ar?'600 11px "Noto Sans Arabic",sans-serif':'700 10px "DM Sans",sans-serif';
+  ctx.textAlign='center';ctx.fillText(ar?'مركبتك':'YOUR CRAFT',p.x,p.y+43);ctx.restore();
+}
+function drawDebris(ctx,flight,view){
+  for(const d of flight.debris){
+    const p=view.project(d);
+    ctx.save();ctx.translate(p.x,p.y);ctx.rotate(d.phase+flight.elapsed*.36);
+    ctx.fillStyle='#ca815766';ctx.strokeStyle='#e7a68199';ctx.lineWidth=1.2;
+    ctx.beginPath();ctx.moveTo(-7,-9);ctx.lineTo(6,-7);ctx.lineTo(10,2);ctx.lineTo(2,10);ctx.lineTo(-9,4);ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();
+  }
+}
+export function renderCountryAtlas(ctx,width,height,flight,previewCountry,ar,preview=false){
+  const countryId=flight?.countryId||previewCountry||'morocco',country=getCountry(countryId);
+  const view=viewport(width,height,countryId,preview);
+  drawCanvasBackdrop(ctx,width,height,country,ar,preview,view,flight?.elapsed||0);
+  drawLand(ctx,countryId,country,view,flight?.elapsed||0);
+  if(!flight){
+    ctx.save();ctx.font='700 17px "DM Sans",sans-serif';ctx.textAlign='center';ctx.fillStyle='#cae8dc9c';
+    ctx.fillText(country.flag+' '+localizedCountry(country,ar),view.cx,view.cy+view.mapH*.56);ctx.restore();
+    return;
+  }
+  drawRoute(ctx,flight.sites,flight.relay,view,preview);
+  drawDebris(ctx,flight,view);
+  drawTargets(ctx,flight,view,ar,preview);
+  drawShip(ctx,flight,view,ar);
+  // The night phase applies to the entire spacecraft, not a western strip of geography.
+  if(flight.eclipse){
+    ctx.fillStyle='#04101f50';ctx.fillRect(0,0,width,height);
+    ctx.textAlign='left';ctx.font=ar?'600 11px "Noto Sans Arabic",sans-serif':'600 11px "DM Sans",sans-serif';ctx.fillStyle='#efc08c';
+    ctx.fillText(ar?'في ظلّ الأرض · الطاقة الشمسية متوقفة':'ECLIPSE · SOLAR CHARGING OFF',28,height-116);
+  }
+  ctx.save();ctx.fillStyle='#91b0b8';ctx.textAlign='left';ctx.font=ar?'500 10px "Noto Sans Arabic",sans-serif':'500 10px "DM Sans",sans-serif';
+  ctx.fillText(ar?'الخريطة للعبة · الإحداثيات تقريبية':'MAP FOR GAMEPLAY · APPROXIMATE COORDINATES',22,height-15);ctx.restore();
+}

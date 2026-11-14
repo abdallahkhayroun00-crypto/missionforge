@@ -1,7 +1,15 @@
 import {parts,starterCraft,validateCraft,analyzeCraft,experiment,readFleet,saveFleet} from './craft.js';
+import {countries,localizedCountry} from './country-missions.js';
 const $=s=>document.querySelector(s);
 const T=s=>window.MissionLang.t(s),arabic=()=>window.MissionLang.isArabic(),partName=id=>T(parts[id].name);
-const note=message=>{$('#notice').textContent=message;};let storage;try{storage=localStorage;}catch{storage={getItem:()=>null,setItem:()=>{throw Error('Storage unavailable');}};}
+const note=message=>{$('#notice').textContent=message;};
+const COUNTRY_KEY='missionforge.country';
+let countryId=new URLSearchParams(location.search).get('country')||'morocco';
+try{countryId=new URLSearchParams(location.search).get('country')||localStorage.getItem(COUNTRY_KEY)||'morocco';}catch{}
+if(!Object.hasOwn(countries,countryId))countryId='morocco';
+function renderCountryPicker(){const select=$('#country-select');select.innerHTML=Object.entries(countries).map(([key,c])=>`<option value="${key}">${c.flag} ${localizedCountry(c,arabic())}</option>`).join('');select.value=countryId;}
+renderCountryPicker();
+$('#country-select').onchange=()=>{countryId=$('#country-select').value;try{localStorage.setItem(COUNTRY_KEY,countryId)}catch{}};let storage;try{storage=localStorage;}catch{storage={getItem:()=>null,setItem:()=>{throw Error('Storage unavailable');}};}
 let craft=starterCraft(),selected='solar',rotation=45,fleet=readFleet(storage),comparison=null;
 try{const draft=validateCraft(JSON.parse(sessionStorage.getItem('missionforge.flightCraft')||'null'));if(new URLSearchParams(location.search).has('edit')&&draft)craft=draft;}catch{}
 $('#craft-name').value=craft.name;
@@ -40,9 +48,9 @@ function renderFleet(){const parent=$('#fleet');parent.replaceChildren();if(!fle
 $('#craft-name').oninput=()=>{craft.name=$('#craft-name').value.trim()||'Untitled spacecraft';};$('#rotate').onclick=()=>{rotation+=90;$('#deck').style.transform=`rotateX(50deg) rotateZ(${rotation}deg)`;};$('#duty').oninput=drawExperiment;$('#shadow').oninput=drawExperiment;
 $('#save').onclick=()=>{const next=structuredClone(fleet),index=next.findIndex(c=>c.name===craft.name);if(index<0&&next.length>=8){note(arabic()?'وصلت إلى الحد الأقصى: ثمانية تصاميم. احذف تصميمًا أو استخدم اسمه لاستبداله.':'Eight designs saved. Delete one, or reuse a saved name to replace it.');return;}if(index>=0)next[index]=structuredClone(craft);else next.push(structuredClone(craft));if(saveFleet(storage,next)){fleet=next;renderFleet();drawExperiment();note(arabic()?`تم حفظ «${craft.name}». إذا حفظت تصميمًا بالاسم نفسه فسيحلّ محله.`:`Saved ${craft.name}. Saving the same name replaces that design.`);}else note(arabic()?'التخزين غير متاح في هذا المتصفح. التصميم الحالي ما زال ظاهرًا لكنه لم يُحفظ.':'Browser storage is unavailable. Your current design is still here, but was not saved.');};
 $('#starter').onclick=()=>{craft=starterCraft();$('#craft-name').value=craft.name;render();note(arabic()?'تم تحميل التصميم المبدئي دون تغيير تصاميمك المحفوظة.':'Starter loaded. Saved fleet unchanged.');};$('#clear').onclick=()=>{craft.cells={'0,0':'core'};render();note(arabic()?'تم إفراغ المنصة. تصاميمك المحفوظة لم تتغيّر.':'Deck cleared. Your saved fleet is unchanged.');};
-$('#fly').onclick=()=>{if(!analyzeCraft(craft).ready)return;try{sessionStorage.setItem('missionforge.flightCraft',JSON.stringify(craft));location.href='index.html?custom=1';}catch{note(arabic()?'تعذّر تمرير التصميم إلى اللعبة لأن التخزين غير متاح. فعّل تخزين الموقع وأعد المحاولة.':'Session storage is unavailable; the flight cannot receive this design. Enable site storage and retry.');}};
+$('#fly').onclick=()=>{if(!analyzeCraft(craft).ready)return;try{sessionStorage.setItem('missionforge.flightCraft',JSON.stringify(craft));location.href='index.html?custom=1&country='+encodeURIComponent(countryId);}catch{note(arabic()?'تعذّر تمرير التصميم إلى اللعبة لأن التخزين غير متاح. فعّل تخزين الموقع وأعد المحاولة.':'Session storage is unavailable; the flight cannot receive this design. Enable site storage and retry.');}};
 selectPart();render();renderFleet();
-window.addEventListener('missionforge-language-change',()=>{renderParts();selectPart();render();renderFleet();});
+window.addEventListener('missionforge-language-change',()=>{renderParts();renderCountryPicker();selectPart();render();renderFleet();});
 
 $('#export').onclick=()=>{const blob=new Blob([JSON.stringify(craft,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='missionforge-design.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 $('#import').onclick=()=>$('#import-file').click();

@@ -86,7 +86,11 @@ function drawCanvasBackdrop(ctx,width,height,country,ar,preview,view,seconds){
   ctx.restore();
 }
 function drawLand(ctx,countryId,country,view,seconds){
-  const polygons=outlines[countryId]||outlines.morocco;
+  // Keep the complete southern outline visible. An internal dashed division
+  // marks the territory whose political status is disputed.
+  const polygons=countryId==='morocco'
+    ?[...outlines.morocco,...outlines.westernSahara]
+    :outlines[countryId]||outlines.morocco;
   traceOutline(ctx,polygons,country,view);
   ctx.save();
   ctx.shadowColor='#6ecebb35';ctx.shadowBlur=34;
@@ -167,7 +171,7 @@ function drawTargets(ctx,flight,view,ar,preview){
     if(site===active&&!done){ctx.beginPath();ctx.arc(p.x,p.y,23+Math.sin(flight.elapsed*2)*2,0,TWO_PI);ctx.lineWidth=1.2;ctx.strokeStyle='#ead39c88';ctx.stroke();}
     ctx.fillStyle=color;ctx.font='700 13px "DM Sans",sans-serif';ctx.textAlign='center';ctx.fillText(done?'✓':blocked?'!':String(i+1),p.x,p.y+5);
     ctx.restore();
-    const dir=site.id==='casablanca'?'top':site.id==='el-jadida'?'left':site.id==='berlin'?'left':site.id==='guelmim'?'right':'right';
+    const dir=site.id==='casablanca'?'right':site.id==='el-jadida'?'left':site.id==='berlin'?'left':site.id==='guelmim'?'right':'right';
     const label=localizedRegion(site,ar),second=done?(ar?'اكتمل الرصد':'SCAN COMPLETE'):blocked?(ar?'الرؤية محجوبة':'VISIBILITY BLOCKED'):progress+'/2  '+(ar?'حزم بيانات':'PACKETS');
     writePill(ctx,p.x,p.y,label,second,ar,dir,view,done?'done':blocked?'blocked':'ready');
     if(blocked){
@@ -179,6 +183,26 @@ function drawTargets(ctx,flight,view,ar,preview){
   ctx.save();ctx.beginPath();ctx.arc(p.x,p.y,23,0,TWO_PI);ctx.fillStyle='#513e2988';ctx.fill();ctx.strokeStyle='#efc686';ctx.lineWidth=2;ctx.stroke();
   ctx.fillStyle='#ffe0a1';ctx.textAlign='center';ctx.font='700 17px "DM Sans",sans-serif';ctx.fillText('⇧',p.x,p.y+5);ctx.restore();
   writePill(ctx,p.x,p.y,ar?'محطة إرسال البيانات':'DATA RELAY',ar?'اضغط E لإرسال البيانات':'HOLD E TO TRANSMIT',ar,'bottom',view,'ready');
+}
+
+function drawPreviewSites(ctx,country,view,ar){
+  // Show real target positions before launch as well as while playing.
+  const siteLabels=country.regions||[];
+  for(let i=0;i<siteLabels.length;i++){
+    const site=siteLabels[i],p=view.fromGeo(country,site.lat,site.lon);
+    ctx.save();
+    ctx.beginPath();ctx.arc(p.x,p.y,8,0,TWO_PI);
+    ctx.fillStyle='#0b2836';ctx.fill();ctx.strokeStyle='#b6efdc';ctx.lineWidth=2;ctx.stroke();
+    ctx.beginPath();ctx.arc(p.x,p.y,2.5,0,TWO_PI);ctx.fillStyle='#e9c993';ctx.fill();
+    ctx.restore();
+    let side=site.id==='el-jadida'?'left':site.id==='casablanca'?'right':'right';
+    writePill(ctx,p.x,p.y,localizedRegion(site,ar),(ar?'منطقة الرصد ':'SURVEY AREA ')+(i+1),ar,side,view,'ready');
+  }
+  if(country.relay){
+    const p=view.fromGeo(country,country.relay.lat,country.relay.lon);
+    ctx.save();ctx.beginPath();ctx.arc(p.x,p.y,5,0,TWO_PI);
+    ctx.fillStyle='#f5c88c';ctx.fill();ctx.restore();
+  }
 }
 function drawShip(ctx,flight,view,ar){
   const p=view.project(flight);
@@ -212,8 +236,12 @@ export function renderCountryAtlas(ctx,width,height,flight,previewCountry,ar,pre
   drawCanvasBackdrop(ctx,width,height,country,ar,preview,view,flight?.elapsed||0);
   drawLand(ctx,countryId,country,view,flight?.elapsed||0);
   if(!flight){
-    ctx.save();ctx.font='700 17px "DM Sans",sans-serif';ctx.textAlign='center';ctx.fillStyle='#cae8dc9c';
-    ctx.fillText(country.flag+' '+localizedCountry(country,ar),view.cx,view.cy+view.mapH*.56);ctx.restore();
+    drawPreviewSites(ctx,country,view,ar);
+    ctx.save();
+    ctx.font=ar?'700 15px "Noto Sans Arabic",sans-serif':'700 15px "DM Sans",sans-serif';
+    ctx.textAlign='center';ctx.fillStyle='#d9eadfa6';
+    ctx.fillText(country.flag+' '+localizedCountry(country,ar),view.cx,view.rect.bottom-16);
+    ctx.restore();
     return;
   }
   drawRoute(ctx,flight.sites,flight.relay,view,preview);

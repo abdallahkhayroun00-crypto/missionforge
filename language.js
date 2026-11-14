@@ -2,6 +2,9 @@
 (() => {
   const STORAGE_KEY='missionforge.language';
   const ar={
+    'Choose language':'اختر اللغة',
+    'MissionForge — Orbital Expedition':'MissionForge — رحلة مدارية',
+    '2.5D orbital game. Move with WASD or arrow keys, hold Space to scan, hold E to downlink. Touch controls below.':'لعبة مهمة مدارية تفاعلية. تحرّك بمفاتيح WASD أو الأسهم، واضغط مطوّلًا على Space للرصد وعلى E لإرسال البيانات. توجد أزرار لمس أسفل الشاشة.',
     'ATLAS TECH / SPACECRAFT WORKSHOP':'ATLAS TECH / ورشة تصميم المركبات',
     'Mission lab →':'مختبر المهمات ←',
     'DESIGN IT. TEST IT. FLY IT.':'صمّمها. اختبرها. أطلقها.',

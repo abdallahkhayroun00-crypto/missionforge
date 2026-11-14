@@ -19,7 +19,7 @@ All component costs, masses, powers, usable battery capacities, data units, obje
 - Circular orbital period T = 2π√((R+h)³/μ), converted to minutes.
 - Simplified maximum eclipse duration E = T × asin(R/(R+h))/π. This assumes a circular orbit, a cylindrical Earth shadow and zero solar beta angle. It is a teaching approximation, not a prediction for a real launch date.
 - Sunlight duration S = T − E.
-- Average power P = 8 W bus + 0.4 × payload active power + 0.1 × radio active power. Duty factors are illustrative, with average demand treated as constant in sunlight and eclipse.
+- Average power P = 8 W bus + 0.4 × payload active power + (contact minutes / orbital period minutes) × radio active power. Duty factors are illustrative, with average demand treated as constant in sunlight and eclipse.
 - Generated energy per orbit = solar rated power × S/60 × 0.8. The 0.8 factor is an assumed net derating factor.
 - Required energy per orbit = P × T/60.
 - Usable battery capacity must exceed P × E/60. Battery capacities already represent usable storage. Additional conversion, charge-rate and degradation limits are omitted.

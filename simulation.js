@@ -10,7 +10,7 @@ export const catalog = {
     {id:'extended',name:'Extended array',detail:'More power • 75 W in sunlight',cost:20,mass:12,generation:75}
   ],
   battery: [
-    {id:'small',name:'Standard battery',detail:'15 Wh usable storage',cost:6,mass:4,capacity:15},
+    {id:'small',name:'Standard battery',detail:'8 Wh usable storage',cost:6,mass:4,capacity:8},
     {id:'large',name:'Endurance battery',detail:'35 Wh usable storage',cost:12,mass:9,capacity:35}
   ],
   radio: [
@@ -45,8 +45,8 @@ export function simulate(design) {
   const period=2*Math.PI*Math.sqrt((6371+c.orbit.altitude)**3/398600.4418)/60;
   const eclipse=period*Math.asin(6371/(6371+c.orbit.altitude))/Math.PI;
   const sunlight=period-eclipse;
-  // Simplified orbit-average demand: bus always on, payload 40%, radio 10%.
-  const demand=8+c.payload.power*0.4+c.radio.power*0.1;
+  // Simplified orbit-average demand: bus always on, payload 40%, radio during the assumed ground contact.
+  const demand=8+c.payload.power*0.4+c.radio.power*c.orbit.contact/period;
   const energyGenerated=c.solar.generation*sunlight/60*0.8;
   const energyNeeded=demand*period/60;
   const eclipseNeeded=demand*eclipse/60;

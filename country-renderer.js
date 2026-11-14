@@ -1,4 +1,4 @@
-import {outlines,moroccoContinuousOutline} from './country-outlines.js';
+import {outlines,moroccoContinuousOutline} from './country-outlines.js?v=unified-map-1';
 import {getCountry,pointFor,isObscured,localizedRegion,localizedCountry} from './country-missions.js';
 
 // Dedicated north-up atlas view. Geography is anchored to approximate WGS84

@@ -1,0 +1,3 @@
+import {defineConfig} from '@playwright/test';
+import {existsSync} from 'node:fs';
+export default defineConfig({testDir:'./browser-tests',timeout:30000,fullyParallel:false,use:{baseURL:'http://127.0.0.1:8765',headless:true,launchOptions:{executablePath:process.env.CHROMIUM_PATH||(existsSync('/usr/bin/chromium')?'/usr/bin/chromium':undefined),args:['--no-sandbox']},screenshot:'only-on-failure',trace:'retain-on-failure'},webServer:{command:'python3 -m http.server 8765',url:'http://127.0.0.1:8765',reuseExistingServer:true},projects:[{name:'desktop',use:{viewport:{width:1440,height:1000}}},{name:'phone',use:{viewport:{width:390,height:844},hasTouch:true,isMobile:true}}]});

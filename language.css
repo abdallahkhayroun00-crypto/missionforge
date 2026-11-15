@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap');
+.lang-switch{display:inline-flex;align-items:center;gap:3px;flex:0 0 auto;padding:3px;border:1px solid #64778570;border-radius:7px;background:#081720;color:#e6edef;direction:ltr;white-space:nowrap}
+.lang-switch button{display:inline-flex;align-items:center;justify-content:center;min-height:31px;min-width:38px;padding:5px 9px!important;margin:0!important;border:0!important;border-radius:5px;background:transparent!important;color:#aac1c8!important;cursor:pointer;font:600 11px 'DM Sans',sans-serif;letter-spacing:.1px!important;transition:background .15s,color .15s}
+.lang-switch button[lang="ar"]{font-family:'Noto Sans Arabic',sans-serif;font-size:12px}
+.lang-switch button.active{background:#d5aa76!important;color:#11222e!important;box-shadow:0 1px 8px #0005}
+.lang-switch button:focus-visible{outline:2px solid #ffd299;outline-offset:3px}
+.header-actions{display:flex;align-items:center;gap:16px}
+html[dir="rtl"] body{font-family:'Noto Sans Arabic','DM Sans',system-ui,sans-serif;text-align:right}
+html[dir="rtl"] h1,html[dir="rtl"] h2,html[dir="rtl"] h3,html[dir="rtl"] h4,html[dir="rtl"] strong,html[dir="rtl"] legend{font-family:'Noto Sans Arabic',sans-serif;letter-spacing:0!important;line-height:1.55}
+html[dir="rtl"] h1{font-size:clamp(30px,4.2vw,48px)}
+html[dir="rtl"] .brief h1{font-size:clamp(43px,6vw,76px);line-height:1.35;text-transform:none}
+html[dir="rtl"] .eyebrow,html[dir="rtl"] .kicker,html[dir="rtl"] .library-eyebrow,html[dir="rtl"] .module-group-heading h4,html[dir="rtl"] .field-label,html[dir="rtl"] .mission-stamp{letter-spacing:0!important;font-family:'Noto Sans Arabic',sans-serif}
+html[dir="rtl"] .module-name-line strong{font-size:12px;line-height:1.5}
+html[dir="rtl"] .module-group-heading h4{font-size:11px}
+html[dir="rtl"] .library-heading h3{font-size:21px}
+html[dir="rtl"] .module-spec-line span{font-size:10px;letter-spacing:0}
+html[dir="rtl"] .library .module-button{text-align:right}
+html[dir="rtl"] .library .module-button:before{left:auto;right:0}
+html[dir="rtl"] .module-selected-mark{right:auto;left:0;border-radius:0 0 5px 0}
+html[dir="rtl"] .module-facts{letter-spacing:0}
+html[dir="rtl"] .library .library-inspector p{font-size:11px}
+html[dir="rtl"] .library .library-kicker h2,html[dir="rtl"] .telemetry h2{letter-spacing:0;font:600 12px 'Noto Sans Arabic',sans-serif}
+html[dir="rtl"] .module-group-heading p{font-size:10px}
+html[dir="rtl"] .inspector-header,html[dir="rtl"] .inspector-foot{font-size:10px;letter-spacing:0}
+html[dir="rtl"] .yard-title p,html[dir="rtl"] .bench p,html[dir="rtl"] .fleet p{font-size:12px}
+html[dir="rtl"] .assembly-bar label{letter-spacing:0;font-size:11px}
+html[dir="rtl"] #deck{direction:ltr}
+html[dir="rtl"] #craft-name{direction:auto;text-align:start}
+html[dir="rtl"] #chart{direction:ltr}
+html[dir="rtl"] .metric,html[dir="rtl"] .module-spec-line{font-variant-numeric:tabular-nums}
+html[dir="rtl"] .issues{padding-inline-start:30px}
+html[dir="rtl"] .hud,html[dir="rtl"] .dpad,html[dir="rtl"] #world{direction:ltr}
+html[dir="rtl"] .hud small,html[dir="rtl"] .comms small{font-size:10px;letter-spacing:0}
+html[dir="rtl"] .hud strong{font-family:'DM Sans',sans-serif}
+html[dir="rtl"] .comms{border-left:none;border-right:2px solid #e8be81}
+html[dir="rtl"] .topbar nav button,html[dir="rtl"] .flight-footer button{font-family:'Noto Sans Arabic',sans-serif;letter-spacing:0}
+html[dir="rtl"] .mission-tag{margin-left:0;margin-right:auto;text-align:left}
+html[dir="rtl"] .flight-guide span,html[dir="rtl"] .choices .choice{text-align:right}
+html[dir="rtl"] .choice{padding:14px 13px 13px 26px}
+html[dir="rtl"] .radio-dot{right:auto;left:10px}
+html[dir="rtl"] .mission-stamp{border-left:0;border-right:1px solid var(--line,#26363c);padding-left:0;padding-right:24px}
+html[dir="rtl"] #loadout legend{letter-spacing:0;font-size:12px}
+html[dir="rtl"] .stage,html[dir="rtl"] .check{line-height:1.65}
+html[dir="rtl"] .stage small{letter-spacing:0}
+html[dir="rtl"] .meter strong{unicode-bidi:plaintext}
+html[dir="rtl"] dialog,#cockpit[open]{font-family:'Noto Sans Arabic',sans-serif}
+html[dir="rtl"] .scene-caption,html[dir="rtl"] .cockpit-top{letter-spacing:0}
+@media(max-width:760px){
+ .header-actions{gap:8px}
+ .topbar nav{gap:7px}
+ .lang-switch{padding:2px}
+ .lang-switch button{min-height:28px;min-width:32px;padding:4px 6px!important;font-size:10px}
+ .lang-switch button[lang="ar"]{font-size:11px}
+ header .header-actions>a{font-size:10px}
+ html[dir="rtl"] .brief h1{font-size:clamp(36px,9vw,60px)}
+ html[dir="rtl"] .module-group-items{grid-template-columns:1fr}
+}
+@media(max-width:390px){
+ .header-actions>a{display:none}
+ .topbar nav{gap:5px}
+ .topbar .wordmark{font-size:10px;letter-spacing:.3px}
+}
+
+/* Arabic instructions stay readable without shrinking technical content. */
+html[dir="rtl"] .flight-answers button{text-align:right;font-family:'Noto Sans Arabic',sans-serif}
+html[dir="rtl"] .choice strong,html[dir="rtl"] .part strong{font-size:12px;line-height:1.6}
+html[dir="rtl"] .choice small,html[dir="rtl"] .part small{font-size:11px;line-height:1.6}
+html[dir="rtl"] .academy-banner h2{line-height:1.5}
+html[dir="rtl"] .flight-guide{line-height:1.9}
+html[dir="rtl"] .module-count,html[dir="rtl"] .module-facts span{font-family:'Noto Sans Arabic',sans-serif}
+@media(max-width:640px){
+ .topbar nav>a:first-of-type{font-size:0}
+ .topbar nav>a:first-of-type::after{content:"Build";font-size:11px}
+ html[dir="rtl"] .topbar nav>a:first-of-type::after{content:"الورشة";font:600 11px 'Noto Sans Arabic',sans-serif}
+ .topbar #help{font-size:0;padding:7px 10px}
+ .topbar #help::after{content:"?";font-size:15px}
+ header:has(.brand) nav>a:nth-of-type(2){display:none}
+ header:has(.brand) nav>a:first-of-type{font-size:0}
+ header:has(.brand) nav>a:first-of-type::after{content:"Project";font-size:11px}
+ html[dir="rtl"] header:has(.brand) nav>a:first-of-type::after{content:"المشروع";font:600 11px 'Noto Sans Arabic',sans-serif}
+ .header-actions>a{font-size:0!important}
+ .header-actions>a::after{content:"Lab";font-size:11px}
+ html[dir="rtl"] .header-actions>a::after{content:"المختبر";font:600 11px 'Noto Sans Arabic',sans-serif}
+}
